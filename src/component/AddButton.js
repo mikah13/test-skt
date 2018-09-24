@@ -12,7 +12,7 @@ import Slide from '@material-ui/core/Slide';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
-
+import Grid from '@material-ui/core/Grid';
 const styles = {
     appBar: {
         position: 'relative'
@@ -30,7 +30,11 @@ function Transition(props) {
 
 class AddButton extends React.Component {
     state = {
-        open: false
+        open: false,
+        obj: this.props.schema.reduce((a, b) => {
+            a[b] = '';
+            return a;
+        }, {})
     };
 
     handleClickOpen = () => {
@@ -44,20 +48,40 @@ class AddButton extends React.Component {
 
     handleAdd = a => {
         this.props.clickEvent(a);
-        this.setState({open: false});
+        this.setState({
+            open: false,
+            obj: this.props.schema.reduce((a, b) => {
+                a[b] = '';
+                return a;
+            }, {})
+        });
+    }
+    handleInputChange = e => {
+        let prop = e.target.id
+        let newData = e.target.value;
+        let newObj = this.state.obj;
+        newObj[prop] = newData;
+        this.setState({obj: newObj})
+        // document.getElementById('code').innerText = e.target.value;
     }
     generateInput = (a, i) => {
-        return <TextField key={`textfield-${i}`} id="outlined-name" label={a.charAt(0).toUpperCase() + a.slice(1)} margin="normal" variant="outlined"/>
+        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1)} margin="normal" style={{
+                width: '50%',
+                marginLeft: '25%'
+
+            }} onChange={this.handleInputChange
+}/></Grid>
 
     }
     generateForm = _ => {
-        return this.props.schema.map((a,i) => {
+        return this.props.schema.map((a, i) => {
             // console.log(a);
-            return this.generateInput(a,i);
+            return this.generateInput(a, i);
         })
     }
     render() {
         const {classes} = this.props;
+
         return (<div style={margin}>
             <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
                 <AddIcon/>
@@ -73,19 +97,24 @@ class AddButton extends React.Component {
                         <Typography variant="title" color="inherit" className={classes.flex}>
                             New Entry
                         </Typography>
-                        <Button color="inherit" onClick={() => this.handleAdd('Hello from add')}>
+                        <Button color="inherit" onClick={() => this.handleAdd(document.getElementById('code').innerText)}>
                             Add
                         </Button>
                     </Toolbar>
 
                 </AppBar>
                 <DialogContent>
+                    <Grid container={true} alignItems="center" justify="center">
+                        {/* <Grid item="item" xs={7}> */}
+                        {this.generateForm()}
+                        {/* <Grid item="item" xs={7}> */}
+                        {/* </Grid> */}
 
-                    {/* <Grid item="item" xs={7}> */}
-                    {this.generateForm()}
-                    {/* <Grid item="item" xs={7}> */}
-                    {/* </Grid> */}
+                    </Grid>
+                    <Grid container={true} alignItems="center" justify="center">
 
+                        <code id="code">{JSON.stringify(this.state.obj)}</code>
+                    </Grid>
                 </DialogContent>
                 {/* <List>
                     <ListItem button={true}>
@@ -98,6 +127,7 @@ class AddButton extends React.Component {
                 </List> */
                 }
             </Dialog>
+
         </div>);
     }
 }

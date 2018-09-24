@@ -27,11 +27,11 @@ class UploadButton extends Component {
         if (FILE_TYPE.indexOf(file_type) !== -1) {
             let reader = new FileReader();
             reader.onload = (a => {
-                console.log(a);
                 return e => {
                     document.getElementById('input-file-button').style.display = 'inline-block';
                     document.getElementById('input-file-name').innerHTML = UPLOAD_ICON + a.name;
-                    // document.getElementById('input-file').innerText = JSON.stringify(str);
+                    let data = e.currentTarget.result;
+                    this.props.uploadFile(data);
                 };
             })(file);
             reader.readAsText(file);
@@ -60,7 +60,8 @@ class UploadButton extends Component {
 }
 
 UploadButton.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    uploadFile:PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(UploadButton);

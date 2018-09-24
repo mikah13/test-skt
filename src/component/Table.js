@@ -8,11 +8,13 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-
 import OutputTableHead from './OutputTableHead';
 import OutputTableToolbar from './OutputTableToolbar';
 import AddButton from './AddButton';
 import UploadButton from './UploadButton';
+import dataSchema from '../schemas/Public Art.json';
+import {stableSort, getSorting} from './Helpers';
+
 let counter = 0;
 let schema = [
     'name',
@@ -22,9 +24,10 @@ let schema = [
     'artist',
     'status'
 ];
+
 let dataObj = []
 // CREATE DATA BASE ON SCHEMA
-function createData(...arg) {
+function createData(arg) {
     let obj = {}
     schema.forEach((e, i) => {
         obj[e] = arg[i]
@@ -45,32 +48,6 @@ const rows = schema.map((e, i) => {
         label: e.toUpperCase()
     }
 })
-function desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if (order !== 0)
-            return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => desc(a, b, orderBy)
-        : (a, b) => -desc(a, b, orderBy);
-}
 
 const styles = theme => ({
     root: {
@@ -91,11 +68,15 @@ class EnhancedTable extends React.Component {
         orderBy: schema[0],
         selected: [],
         data: [
-            createData('BCIT', 123, 123, '604-123-1234', 'BCIT', 'Open'), // CHANGE DATA CREATED HERE
-            createData('SFU', 123, 123, '604-123-1234', 'SFU', 'Open'),
-            createData('UBC', 123, 123, '604-123-1234', 'UBC', 'Closed'),
-            createData('Douglas', 123, 123, '604-123-1234', 'Douglas', 'Open'),
-            createData('Langara', 123, 123, '604-123-1234', 'Langara', 'Closed')
+            createData([
+                'BCIT',
+                123,
+                123,
+                '604-123-1234',
+                'BCIT',
+                'Open'
+            ]), // CHANGE DATA CREATED HERE
+
         ],
         page: 0,
         rowsPerPage: 5
@@ -163,9 +144,24 @@ class EnhancedTable extends React.Component {
         // }
     }
     handleAddButton = a => {
-        console.log(a);
+
         let newData = this.state.data;
-        newData.push(createData('UVIC', 123, 123, '604-123-1234', 'UVIC', 'Closed'))
+        a = JSON.parse(a);
+        let arr = [];
+        for (let val in a) {
+            arr.push(a[val])
+        }
+
+        newData.push(createData(arr))
+        this.setState({data: newData})
+    }
+    handleUpload = a => {
+        let data = JSON.parse(a);
+        let newData = this.state.data;
+        data.forEach(el => {
+            el.id = ++counter;
+            newData.push(el);
+        })
         this.setState({data: newData})
     }
     render() {
@@ -181,7 +177,7 @@ class EnhancedTable extends React.Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (<div>
-            <UploadButton/>
+            <UploadButton uploadFile={this.handleUpload}/>
             <Paper className={classes.root}>
                 <OutputTableToolbar numSelected={selected.length}/>
                 <div className={classes.tableWrapper}>
@@ -191,7 +187,6 @@ class EnhancedTable extends React.Component {
                             {
                                 stableSort(data, getSorting(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                                     const isSelected = this.isSelected(n.id);
-
                                     return (<TableRow hover={true} onClick={event => this.handleClick(event, n.id)} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
                                         <TableCell padding="checkbox">
                                             <Checkbox checked={isSelected}/>
@@ -204,7 +199,7 @@ class EnhancedTable extends React.Component {
                                 emptyRows > 0 && (<TableRow style={{
                                         height: 49 * emptyRows
                                     }}>
-                                    <TableCell colSpan={6}/>
+                                    <TableCell colSpan={schema.length + 1}/>
                                 </TableRow>)
                             }
                         </TableBody>
