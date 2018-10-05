@@ -71,12 +71,9 @@ class OutputTableToolbar extends React.Component {
         </Toolbar>);
     }
 }
-
 OutputTableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
-
 OutputTableToolbar = withStyles(toolbarStyles)(OutputTableToolbar);
-
 export default withStyles(toolbarStyles)(OutputTableToolbar);

@@ -76,6 +76,7 @@ class AddButton extends React.Component {
     generateForm = _ => {
         return this.props.schema.map((a, i) => {
             // console.log(a);
+
             return this.generateInput(a, i);
         })
     }

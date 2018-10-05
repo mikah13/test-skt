@@ -12,8 +12,8 @@ import OutputTableHead from './OutputTableHead';
 import OutputTableToolbar from './OutputTableToolbar';
 import AddButton from './AddButton';
 import UploadButton from './UploadButton';
-import dataSchema from '../schemas/Public Art.json';
-import {stableSort, getSorting} from './Helpers';
+// import dataSchema from '../schemas/Public Art.json';
+// import {stableSort, getSorting} from './Helpers';
 
 let counter = 0;
 let schema = [
@@ -64,8 +64,6 @@ const styles = theme => ({
 
 class EnhancedTable extends React.Component {
     state = {
-        order: 'asc',
-        orderBy: schema[0],
         selected: [],
         data: [
             createData([
@@ -76,22 +74,20 @@ class EnhancedTable extends React.Component {
                 'BCIT',
                 'Open'
             ]), // CHANGE DATA CREATED HERE
-
         ],
         page: 0,
         rowsPerPage: 5
     };
 
-    handleRequestSort = (event, property) => {
-        const orderBy = property;
-        let order = 'desc';
-
-        if (this.state.orderBy === property && this.state.order === 'desc') {
-            order = 'asc';
-        }
-
-        this.setState({order, orderBy});
-    };
+    // handleRequestSort = (event, property) => {
+    //     const orderBy = property;
+    //     let order = 'desc';
+    //
+    //     if (this.state.orderBy === property && this.state.order === 'desc') {
+    //         order = 'asc';
+    //     }
+    //     this.setState({order, orderBy});
+    // };
 
     handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -165,6 +161,7 @@ class EnhancedTable extends React.Component {
         this.setState({data: newData})
     }
     render() {
+
         const {classes} = this.props;
         const {
             data,
@@ -174,6 +171,7 @@ class EnhancedTable extends React.Component {
             rowsPerPage,
             page
         } = this.state;
+        console.log(this.state);
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (<div>
@@ -182,10 +180,10 @@ class EnhancedTable extends React.Component {
                 <OutputTableToolbar numSelected={selected.length}/>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <OutputTableHead numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={this.handleSelectAllClick} onRequestSort={this.handleRequestSort} rowCount={data.length} rows={rows}/>
+                        <OutputTableHead numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={this.handleSelectAllClick}  rowCount={data.length} rows={rows}/>
                         <TableBody>
                             {
-                                stableSort(data, getSorting(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
+                                data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                                     const isSelected = this.isSelected(n.id);
                                     return (<TableRow hover={true} onClick={event => this.handleClick(event, n.id)} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
                                         <TableCell padding="checkbox">

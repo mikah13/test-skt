@@ -1,91 +1,52 @@
-{
-  "type": "Feature",
-  "geometry": {
-    "type": {
-      "type": "String",
-      "example": "Point",
-      "description": "This indicates that the station is geologically a Point.It can be Point, LineString, MultiLineString"
+/* {
+    "type": "Feature",
+    "meta": {
+        "schema": "<url to schema>",
+        "title": "Public Art",
     },
-    "coordinates": {
-      "items": {
-        "type": "float",
-        "example": 49.222
-      },
-      "type": "array",
-      "example": [
-        49.222,
-        -122.222
-      ]
+    "geometry": {
+        "coordinates": {
+            "Lat": {
+                "title": "Lattitude",
+                "type": "double",
+                "example": 49.222
+            },
+            "Long": {
+                "title": "Longtitude",
+                "type": "double",
+                "example": 50.241
+            }
+        }
+    },
+    "properties": {
+        "id": {
+            "title":"ID",
+            "type": "integer",
+            "example": "1"
+        },
+        "CrossStreet": {
+            "type": "string",
+            "example": "Buchanan Ave"
+        },
+        "BusStopNumber": {
+            "type": "integer",
+            "example": 53576
+        },
+        "Direction": {
+            "type": "string",
+            "example": "SB"
+        },
+        "CityName": {
+            "type": "string",
+            "example": "NEW WESTMINSTER"
+        },
+        "Accessible": {
+            "type": "string",
+            "example": "No"
+        },
+        "Status": {
+            "type": "string",
+            "example": "ACTIVE"
+        }
     }
-  },
-  "properties": {
-    "Website": {
-      "type": "string",
-      "example": "www.google.com"
-    },
-    "KmlName": {
-      "type": "string",
-      "example": "Pump House Mural"
-    },
-    "Address": {
-      "type": "string",
-      "example": "123 West Rd"
-    },
-    "Address2": {
-      "type": "string",
-      "example": "Unit 500"
-    },
-    "City": {
-      "type": "string",
-      "example": "New Westminster"
-    },
-    "Providence": {
-      "type": "string",
-      "example": "BC"
-    },
-    "PostalCode": {
-      "type": "string",
-      "example": "5V6 3E8"
-    },
-    "PhoneNumber": {
-      "type": "integer",
-      "example": 1234567891
-    },
-    "Name": {
-      "type": "string",
-      "example": "Pump House Mural"
-    },
-    "Description": {
-      "type": "string",
-      "example": "\"Puzzled,\" (2013) by artist Steve Hornung brightens the side of an otherwise drab pump house. The mural features a boy with a slingshot, three moose, and interlocking puzzle pieces."
-    },
-    "Id": {
-      "type": "string",
-      "example": "231"
-    },
-    "Category": {
-      "type": "integer",
-      "example": 6
-    },
-    "Company": {
-      "type": "string",
-      "example": "Nike"
-    },
-    "FaxNumber": {
-      "type": "integer",
-      "example": 1234567891
-    },
-    "Email": {
-      "type": "string",
-      "example": "joe@gmail.com"
-    },
-    "Summary": {
-      "type": "string",
-      "example": "\"Puzzled,\" (2013) by artist Steve Hornung brightens the side of an otherwise drab pump house. The mural features a boy with a slingshot, three moose, and interlocking puzzle pieces."
-    },
-    "CatName": {
-      "type": "string",
-      "example": "Public Art/Monuments"
-    }
-  }
-}
+} */
