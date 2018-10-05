@@ -16,7 +16,41 @@ import UploadButton from './UploadButton';
 // import {stableSort, getSorting} from './Helpers';
 
 let counter = 0;
-let schema = [
+// schema = [{},{}]
+{
+    [
+        {name,type,erquire},{}
+    ]
+}
+let schema = {
+    field: [
+    'name',
+    'latitude',
+    'longtitude',
+    'phone',
+    'artist',
+    'status'
+    ],
+    type: [
+        'string',
+        'string',
+        'string',
+        'integer',
+        'string',
+        'string'
+    ],
+    required: [
+        true,
+        true,
+        true,
+        false,
+        false,
+        false
+    ]
+};
+/////////////////////
+
+let schema_field = [
     'name',
     'latitude',
     'longtitude',
@@ -38,7 +72,7 @@ function createData(arg) {
 }
 // DATA
 
-const rows = schema.map((e, i) => {
+const rows = schema_field.map((e, i) => {
     return {
         id: e,
         numeric: false,
@@ -64,6 +98,11 @@ const styles = theme => ({
 
 class EnhancedTable extends React.Component {
     state = {
+<<<<<<< HEAD
+        order: 'asc',
+        orderBy: schema_field[0],
+=======
+>>>>>>> 309471b3c6cc087c113989b898c1f631f3cda661
         selected: [],
         data: [
             createData([
@@ -131,7 +170,7 @@ class EnhancedTable extends React.Component {
         return <TableCell numeric={false} key={b}>{a}</TableCell>
     };
     generateTableData = obj => {
-        return schema.map((e, i) => {
+        return schema_field.map((e, i) => {
             return this.generateTableCell(obj[e], i);
         })
         // console.log(n);
@@ -197,7 +236,7 @@ class EnhancedTable extends React.Component {
                                 emptyRows > 0 && (<TableRow style={{
                                         height: 49 * emptyRows
                                     }}>
-                                    <TableCell colSpan={schema.length + 1}/>
+                                    <TableCell colSpan={schema_field.length + 1}/>
                                 </TableRow>)
                             }
                         </TableBody>
