@@ -13,6 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
+
 let schema_field = [
     'name',
     'latitude',
@@ -49,7 +50,7 @@ function Transition(props) {
 class AddButton extends React.Component {
     state = {
         open: false,
-        obj: schema.reduce((a, b) => {
+        obj: this.props.schema.reduce((a, b) => {
             a[b] = '';
             return a;
         }, {})
@@ -68,7 +69,7 @@ class AddButton extends React.Component {
         this.props.clickEvent(a);
         this.setState({
             open: false,
-            obj: schema.reduce((a, b) => {
+            obj: this.props.schema.reduce((a, b) => {
                 a[b] = '';
                 return a;
             }, {})
@@ -89,12 +90,12 @@ class AddButton extends React.Component {
         let newData = e.target.value;
         let newObj = this.state.obj;
         newObj[prop] = newData;
+
         this.setState({obj: newObj})
-        // document.getElementById('code').innerText = e.target.value;
     }
-    generateInput = (a, b, i) => {
+    generateInput = (a, i) => {
         //add type
-        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a.field} label={a.charAt(0).toUpperCase() + a.slice(1)} type="" margin="normal" style={{
+        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1)} type="" margin="normal" style={{
                 width: '50%',
                 marginLeft: '25%'
 
@@ -107,12 +108,8 @@ class AddButton extends React.Component {
         //need to be modified
         return this.props.schema.map((a, i) => {
             // console.log(a);
-<<<<<<< HEAD
-            return this.generateInput(a.name, a.type, i);
-=======
-
             return this.generateInput(a, i);
->>>>>>> 309471b3c6cc087c113989b898c1f631f3cda661
+
         })
     }
     render() {

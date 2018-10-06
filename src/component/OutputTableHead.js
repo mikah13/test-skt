@@ -4,18 +4,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
 
 class OutputTableHead extends React.Component {
     render() {
-        const {
-            onSelectAllClick,
-            order,
-            orderBy,
-            numSelected,
-            rowCount,
-            rows
-        } = this.props;
+        const {onSelectAllClick, numSelected, rowCount, rows} = this.props;
         return (<TableHead>
             <TableRow>
                 <TableCell padding="checkbox">

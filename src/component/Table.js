@@ -17,11 +17,7 @@ import UploadButton from './UploadButton';
 
 let counter = 0;
 // schema = [{},{}]
-{
-    [
-        {name,type,erquire},{}
-    ]
-}
+
 let schema = {
     field: [
     'name',
@@ -48,12 +44,13 @@ let schema = {
         false
     ]
 };
+
 /////////////////////
 
 let schema_field = [
     'name',
     'latitude',
-    'longtitude',
+    'longitude',
     'phone',
     'artist',
     'status'
@@ -63,7 +60,7 @@ let dataObj = []
 // CREATE DATA BASE ON SCHEMA
 function createData(arg) {
     let obj = {}
-    schema.forEach((e, i) => {
+    schema_field.forEach((e, i) => {
         obj[e] = arg[i]
     })
     obj.id = ++counter;
@@ -98,11 +95,6 @@ const styles = theme => ({
 
 class EnhancedTable extends React.Component {
     state = {
-<<<<<<< HEAD
-        order: 'asc',
-        orderBy: schema_field[0],
-=======
->>>>>>> 309471b3c6cc087c113989b898c1f631f3cda661
         selected: [],
         data: [
             createData([
@@ -118,15 +110,6 @@ class EnhancedTable extends React.Component {
         rowsPerPage: 5
     };
 
-    // handleRequestSort = (event, property) => {
-    //     const orderBy = property;
-    //     let order = 'desc';
-    //
-    //     if (this.state.orderBy === property && this.state.order === 'desc') {
-    //         order = 'asc';
-    //     }
-    //     this.setState({order, orderBy});
-    // };
 
     handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -179,7 +162,6 @@ class EnhancedTable extends React.Component {
         // }
     }
     handleAddButton = a => {
-
         let newData = this.state.data;
         a = JSON.parse(a);
         let arr = [];
@@ -210,7 +192,6 @@ class EnhancedTable extends React.Component {
             rowsPerPage,
             page
         } = this.state;
-        console.log(this.state);
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (<div>
@@ -250,7 +231,7 @@ class EnhancedTable extends React.Component {
                     }} onChangePage={this.handleChangePage} onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
 
             </Paper>
-            <AddButton clickEvent={this.handleAddButton} schema={schema}/></div>);
+            <AddButton clickEvent={this.handleAddButton} schema={schema_field}/></div>);
     }
 }
 
