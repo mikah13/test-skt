@@ -5,7 +5,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-class OutputTableHead extends React.Component {
+/**
+ * Class TableHeader. This contains title of every columns
+ * @extends React
+ */
+class TableHeader extends React.Component {
+
     render() {
         const {onSelectAllClick, numSelected, rowCount, rows} = this.props;
         return (<TableHead>
@@ -25,10 +30,10 @@ class OutputTableHead extends React.Component {
     }
 }
 
-OutputTableHead.propTypes = {
+TableHeader.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
     rowCount: PropTypes.number.isRequired
 };
 
-export default OutputTableHead;
+export default TableHeader;

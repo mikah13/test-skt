@@ -10,6 +10,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+/**
+ * Style Setting for TableToolbar
+ * @param  {[type]} theme [description]
+ * @return {[type]}       [description]
+ */
 const toolbarStyles = theme => ({
     root: {
         paddingRight: theme.spacing.unit
@@ -34,7 +39,11 @@ const toolbarStyles = theme => ({
     }
 });
 
-class OutputTableToolbar extends React.Component {
+/**
+ * Class TableToolbar. This contains SchemaTitle and Delete Button.
+ * @extends React
+ */
+class TableToolbar extends React.Component {
     render() {
         const {numSelected, classes} = this.props;
         return (<Toolbar className={classNames(classes.root, {
@@ -48,7 +57,7 @@ class OutputTableToolbar extends React.Component {
                             selected
                         </Typography>)
                         : (<Typography variant="title" id="tableTitle">
-                            Public Art
+                            {this.props.schema.split('_').join(' ').toUpperCase()}
                         </Typography>)
                 }
             </div>
@@ -71,9 +80,9 @@ class OutputTableToolbar extends React.Component {
         </Toolbar>);
     }
 }
-OutputTableToolbar.propTypes = {
+TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
-OutputTableToolbar = withStyles(toolbarStyles)(OutputTableToolbar);
-export default withStyles(toolbarStyles)(OutputTableToolbar);
+
+export default withStyles(toolbarStyles)(TableToolbar);

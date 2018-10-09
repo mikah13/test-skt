@@ -13,6 +13,13 @@
 
 .logo {
     min-width: 250px;
-    width: 35vw;
+    width: 25vw;
     margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+pre{
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }

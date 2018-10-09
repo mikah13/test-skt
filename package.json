@@ -1,25 +1,21 @@
 {
-  "name": "sky-tech",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://github.com/mikah13/test-skt",
-  "dependencies": {
-    "react": "^16.5.1",
-    "react-dom": "^16.5.1",
-    "react-redux": "^5.0.7",
-    "react-scripts": "1.1.5",
-    "redux": "^4.0.0",
-    "redux-form": "^7.4.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "devDependencies": {
-    "gh-pages": "^2.0.0"
-  }
+    "name": "sky-tech",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "muicss": "^0.9.41",
+        "react": "^16.5.1",
+        "react-dom": "^16.5.1",
+        "react-redux": "^5.0.7",
+        "react-scripts": "1.1.5",
+        "redux": "^4.0.0",
+        "redux-form": "^7.4.2"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "predeploy": "npm run build"
+    }
 }

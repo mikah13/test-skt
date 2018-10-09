@@ -8,77 +8,69 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import OutputTableHead from './OutputTableHead';
-import OutputTableToolbar from './OutputTableToolbar';
+import TableHeader from './TableHeader';
+import TableToolbar from './TableToolbar';
 import AddButton from './AddButton';
 import UploadButton from './UploadButton';
-// import dataSchema from '../schemas/Public Art.json';
-// import {stableSort, getSorting} from './Helpers';
-
+import Grid from '@material-ui/core/Grid';
+import Loading from './Loading';
 let counter = 0;
-// schema = [{},{}]
-
-let schema = {
-    field: [
-    'name',
-    'latitude',
-    'longtitude',
-    'phone',
-    'artist',
-    'status'
-    ],
-    type: [
-        'string',
-        'string',
-        'string',
-        'integer',
-        'string',
-        'string'
-    ],
-    required: [
-        true,
-        true,
-        true,
-        false,
-        false,
-        false
-    ]
-};
+let schema = [
+    {
+        field: 'name',
+        type: 'string',
+        required: true
+    }, {
+        field: 'latitude',
+        type: 'string',
+        required: true
+    }, {
+        field: 'longitude',
+        type: 'string',
+        required: true
+    }, {
+        field: 'phone',
+        type: 'integer',
+        required: false
+    }, {
+        field: 'artist',
+        type: 'string',
+        required: false
+    }, {
+        field: 'e-mail',
+        type: 'email',
+        required: false
+    }
+];
 
 /////////////////////
 
-let schema_field = [
-    'name',
-    'latitude',
-    'longitude',
-    'phone',
-    'artist',
-    'status'
-];
-
-let dataObj = []
+let schema_field = [];
+schema.forEach((e, i) => {
+    schema_field[i] = e.field
+})
 // CREATE DATA BASE ON SCHEMA
-function createData(arg) {
+function createData(arg, schema) {
     let obj = {}
-    schema_field.forEach((e, i) => {
+    schema.forEach((e, i) => {
         obj[e] = arg[i]
     })
     obj.id = ++counter;
-    dataObj.push(obj);
     return obj;
 }
-// DATA
-
-const rows = schema_field.map((e, i) => {
-    return {
-        id: e,
-        numeric: false,
-        disablePadding: i === 0
-            ? true
-            : false,
-        label: e.toUpperCase()
+function objToArray(obj) {
+    let arr = [];
+    for (let val in obj) {
+        arr.push(val);
     }
-})
+
+    return arr;
+}
+function encode(schema) {
+    return schema.split('_').map(a => a[0].toUpperCase() + a.substring(1)).join('%20') + '.json';
+}
+
+// DATA
 
 const styles = theme => ({
     root: {
@@ -94,23 +86,49 @@ const styles = theme => ({
 });
 
 class EnhancedTable extends React.Component {
-    state = {
-        selected: [],
-        data: [
-            createData([
-                'BCIT',
-                123,
-                123,
-                '604-123-1234',
-                'BCIT',
-                'Open'
-            ]), // CHANGE DATA CREATED HERE
-        ],
-        page: 0,
-        rowsPerPage: 5
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: [],
+            data: [
+                // createData([
+                //     'BCIT',
+                //     123,
+                //     123,
+                //     '604-123-1234',
+                //     'BCIT',
+                //     'Open'
+                // ]),  CHANGE DATA CREATED HERE
+            ],
+            page: 0,
+            rowsPerPage: 5,
+            items: {},
+            isLoaded: false
+        };
+        this.timer = null;
+    }
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+    }
+    componentDidMount() {
+        let url = 'https://raw.githubusercontent.com/OpendataDeveloperNetwork/oden-schemas/master/schemas/' + encode(this.props.match.params.schema);
+        fetch(url).then(res => res.json()).then((result) => {
+            this.timer = setTimeout(() => this.setState({isLoaded: true, items: result}), 900);
+        }, (error) => {
+            this.setState({isLoaded: true, error});
+        })
+    }
 
-
+    rows = _ => objToArray(this.state.items.properties).map((e, i) => {
+        return {
+            id: e,
+            numeric: false,
+            disablePadding: i === 0
+                ? true
+                : false,
+            label: e.toUpperCase()
+        }
+    })
     handleSelectAllClick = event => {
         if (event.target.checked) {
             this.setState(state => ({
@@ -153,15 +171,12 @@ class EnhancedTable extends React.Component {
         return <TableCell numeric={false} key={b}>{a}</TableCell>
     };
     generateTableData = obj => {
-        return schema_field.map((e, i) => {
+        return objToArray(this.state.items.properties).map((e, i) => {
             return this.generateTableCell(obj[e], i);
         })
-        // console.log(n);
-        // for(let val in n){
-        //
-        // }
     }
     handleAddButton = a => {
+
         let newData = this.state.data;
         a = JSON.parse(a);
         let arr = [];
@@ -169,7 +184,7 @@ class EnhancedTable extends React.Component {
             arr.push(a[val])
         }
 
-        newData.push(createData(arr))
+        newData.push(createData(arr, objToArray(this.state.items.properties)))
         this.setState({data: newData})
     }
     handleUpload = a => {
@@ -184,23 +199,27 @@ class EnhancedTable extends React.Component {
     render() {
 
         const {classes} = this.props;
-        const {
-            data,
-            order,
-            orderBy,
-            selected,
-            rowsPerPage,
-            page
-        } = this.state;
+        const {data, selected, rowsPerPage, page} = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+        if (!this.state.isLoaded) {
+            return (<Grid container={true} spacing={8} direction="column" alignItems="center" justify="center"><Loading/></Grid>)
+        }
         return (<div>
-            <UploadButton uploadFile={this.handleUpload}/>
+
+            <Grid container={true} spacing={8} justify="space-between">
+                <Grid item={true}>
+                    <AddButton className="add-button" clickEvent={this.handleAddButton} schema={objToArray(this.state.items.properties)}/>
+                </Grid>
+
+                <Grid item={true}>
+                    <UploadButton uploadFile={this.handleUpload}/>
+                </Grid>
+            </Grid>
             <Paper className={classes.root}>
-                <OutputTableToolbar numSelected={selected.length}/>
+                <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema}/>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <OutputTableHead numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={this.handleSelectAllClick}  rowCount={data.length} rows={rows}/>
+                        <TableHeader numSelected={selected.length} onSelectAllClick={this.handleSelectAllClick} rowCount={data.length} rows={this.rows()}/>
                         <TableBody>
                             {
                                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
@@ -217,23 +236,28 @@ class EnhancedTable extends React.Component {
                                 emptyRows > 0 && (<TableRow style={{
                                         height: 49 * emptyRows
                                     }}>
-                                    <TableCell colSpan={schema_field.length + 1}/>
+                                    <TableCell colSpan={Object.keys(this.state.items.properties).length + 1}/>
                                 </TableRow>)
                             }
                         </TableBody>
                     </Table>
                 </div>
 
-                <TablePagination component="div" count={data.length} rowsPerPage={rowsPerPage} page={page} backIconButtonProps={{
+                <CustomPagination component="div" className="tablePagination" count={data.length} rowsPerPage={rowsPerPage} page={page} backIconButtonProps={{
                         'aria-label' : 'Previous Page'
                     }} nextIconButtonProps={{
                         'aria-label' : 'Next Page'
                     }} onChangePage={this.handleChangePage} onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
 
             </Paper>
-            <AddButton clickEvent={this.handleAddButton} schema={schema_field}/></div>);
+        </div>);
     }
 }
+const CustomPagination = withStyles({
+    actions: {
+        marginLeft: 0
+    }
+})(TablePagination);
 
 EnhancedTable.propTypes = {
     classes: PropTypes.object.isRequired

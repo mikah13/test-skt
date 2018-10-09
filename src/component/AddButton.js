@@ -13,25 +13,9 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
-
-let schema_field = [
-    'name',
-    'latitude',
-    'longtitude',
-    'phone',
-    'artist',
-    'status'
-];
-
-let schema_type = [
-    'string',
-    'string',
-    'string',
-    'integer',
-    'string',
-    'string'
-];
-
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+let schema_field = [];
 const styles = {
     appBar: {
         position: 'relative'
@@ -41,20 +25,23 @@ const styles = {
     }
 };
 const margin = {
-    margin: '15px'
+    margin: '0 0 0 0 '
 }
 function Transition(props) {
     return <Slide direction="up" {...props}/>;
 }
 
 class AddButton extends React.Component {
-    state = {
-        open: false,
-        obj: this.props.schema.reduce((a, b) => {
-            a[b] = '';
-            return a;
-        }, {})
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            obj: this.props.schema.reduce((a, b) => {
+                a[b] = '';
+                return a;
+            }, {})
+        };
+    }
 
     handleClickOpen = () => {
         this.setState({open: true});
@@ -77,14 +64,36 @@ class AddButton extends React.Component {
     }
     handleInputChange = e => {
         let prop = e.target.id
-        //Validation
-        //For integer
-        // if (e.target.value.slice(-1).match(/^[+-]?\d+$/)){
-        //     e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+
+        if (e.target.name === "integer") {
+            if (!e.target.value.slice(-1).match(/^[+-]?\d+$/)) {
+                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+            }
+        }
+
+        //For double (number)
+        if (e.target.name === "number") {
+            if (!e.target.value.slice(-1).match(/^[+-]?\d+(\.\d+)?$/)) {
+                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+            }
+        }
+
+        //For email
+        // if (e.target.name == "email"){
+        //     if (e.target.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        //         validation = true;
+        //     } else {
+        //         validation = false;
+        //     }
         // }
-        //For double
-        // if (e.target.value.slice(-1).match(/^[+-]?\d+(\.\d+)?$/)){
-        //     e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+
+        //For required
+        // if (e.target.required){
+        //     if (e.target.value != ""){
+        //         validation = true;
+        //     } else {
+        //         validation = false;
+        //     }
         // }
 
         let newData = e.target.value;
@@ -112,6 +121,7 @@ class AddButton extends React.Component {
 
         })
     }
+
     render() {
         const {classes} = this.props;
 
@@ -137,28 +147,17 @@ class AddButton extends React.Component {
 
                 </AppBar>
                 <DialogContent>
-                    <Grid container={true} alignItems="center" justify="center">
-                        {/* <Grid item="item" xs={7}> */}
-                        {this.generateForm()}
-                        {/* <Grid item="item" xs={7}> */}
-                        {/* </Grid> */}
-
+                    <Grid container={true} justify="center">
+                        <Grid item={true} xs={6}>
+                            {this.generateForm()}
+                        </Grid>
+                        <Grid item={true} xs={5}>
+                            <pre id="code">{JSON.stringify(this.state.obj,undefined,4).split(',').join(',\n')}</pre>
+                        </Grid>
                     </Grid>
-                    <Grid container={true} alignItems="center" justify="center">
 
-                        <code id="code">{JSON.stringify(this.state.obj)}</code>
-                    </Grid>
+
                 </DialogContent>
-                {/* <List>
-                    <ListItem button={true}>
-                        <ListItemText primary="Phone ringtone" secondary="Titania"/>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem button={true}>
-                        <ListItemText primary="Default notification ringtone" secondary="Tethys"/>
-                    </ListItem>
-                </List> */
-                }
             </Dialog>
 
         </div>);
