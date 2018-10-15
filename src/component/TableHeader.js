@@ -18,6 +18,7 @@ class TableHeader extends React.Component {
                 <TableCell padding="checkbox">
                     <Checkbox indeterminate={numSelected > 0 && numSelected < rowCount} checked={numSelected === rowCount && rowCount !== 0} onChange={onSelectAllClick}/>
                 </TableCell>
+                
                 {
                     rows.map(row => {
                         return (<TableCell key={row.id} numeric={row.numeric} padding={'default'}>
