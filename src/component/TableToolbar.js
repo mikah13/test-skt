@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import DownloadIcon from '@material-ui/icons/Archive';
+import Button from '@material-ui/core/Button';
 
 /**
  * Style Setting for TableToolbar
@@ -66,14 +66,18 @@ class TableToolbar extends React.Component {
                 {
                     numSelected > 0
                         ? (<Tooltip title="Delete">
-                            <IconButton aria-label="Delete">
+                            <Button onClick={() => {
+                                    this.props.delete()
+                                }}>
                                 <DeleteIcon/>
-                            </IconButton>
+                            </Button>
                         </Tooltip>)
-                        : (<Tooltip title="Filter list">
-                            <IconButton aria-label="Filter list">
-                                <FilterListIcon/>
-                            </IconButton>
+                        : (<Tooltip title="Download">
+                            <Button onClick={()=>{
+                                this.props.download()
+                            }}aria-label="Download" variant="contained" color="secondary">
+                                <DownloadIcon/>
+                            </Button>
                         </Tooltip>) // SET PROP AS OBJECT BASED ON DATA SCHEMA
                 }
             </div>
@@ -82,7 +86,9 @@ class TableToolbar extends React.Component {
 }
 TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired
+    numSelected: PropTypes.number.isRequired,
+    delete: PropTypes.func.isRequired,
+    download:PropTypes.func.isRequired
 };
 
 export default withStyles(toolbarStyles)(TableToolbar);

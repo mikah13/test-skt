@@ -13,9 +13,9 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-let schema_field = [];
+
+import Tooltip from '@material-ui/core/Tooltip';
+
 const styles = {
     appBar: {
         position: 'relative'
@@ -126,10 +126,12 @@ class AddButton extends React.Component {
         const {classes} = this.props;
 
         return (<div style={margin}>
-            <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
-                <AddIcon/>
-                Add
-            </Button>
+            <Tooltip title="Add New">
+                <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
+                    <AddIcon/>
+                    Add
+                </Button>
+            </Tooltip>
 
             <Dialog fullScreen={true} open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -155,7 +157,6 @@ class AddButton extends React.Component {
                             <pre id="code">{JSON.stringify(this.state.obj,undefined,4).split(',').join(',\n')}</pre>
                         </Grid>
                     </Grid>
-
 
                 </DialogContent>
             </Dialog>

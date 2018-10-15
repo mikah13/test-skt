@@ -14,6 +14,7 @@ import AddButton from './AddButton';
 import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
+
 let counter = 0;
 let schema = [
     {
@@ -42,14 +43,6 @@ let schema = [
         required: false
     }
 ];
-
-/////////////////////
-
-let schema_field = [];
-schema.forEach((e, i) => {
-    schema_field[i] = e.field
-})
-// CREATE DATA BASE ON SCHEMA
 function createData(arg, schema) {
     let obj = {}
     schema.forEach((e, i) => {
@@ -196,6 +189,27 @@ class EnhancedTable extends React.Component {
         })
         this.setState({data: newData})
     }
+
+    download = () => {
+        let downloadData = this.state.data.map(a => {
+            delete a.id;
+            return a;
+
+        });
+        function download(filename, text) {
+            let element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        let text = JSON.stringify(downloadData);
+        let filename = "data.json";
+        download(filename, text);
+
+    }
     render() {
 
         const {classes} = this.props;
@@ -210,13 +224,18 @@ class EnhancedTable extends React.Component {
                 <Grid item={true}>
                     <AddButton className="add-button" clickEvent={this.handleAddButton} schema={objToArray(this.state.items.properties)}/>
                 </Grid>
-
                 <Grid item={true}>
                     <UploadButton uploadFile={this.handleUpload}/>
                 </Grid>
             </Grid>
+
             <Paper className={classes.root}>
-                <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema}/>
+                <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema} delete={() => {
+                        let newData = data.filter((a, b) => {
+                            return selected.indexOf(a.id) === -1;
+                        })
+                        this.setState({data: newData, selected: []})
+                    }} download={this.download}/>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <TableHeader numSelected={selected.length} onSelectAllClick={this.handleSelectAllClick} rowCount={data.length} rows={this.rows()}/>

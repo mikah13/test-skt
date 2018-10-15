@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
     input: {
@@ -42,10 +43,12 @@ class UploadButton extends Component {
             <input className={classes.input} id="contained-button-file" multiple="multiple" type="file" onChange={this.changeEvent}/>
             <span>
                 <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="secondary" component="span" className={classes.button}>
+                        <Tooltip title="Upload">
+                    <Button variant="contained" color="default" component="span" className={classes.button}>
                         <span style={btnStyle}>Upload</span>
                         <CloudUploadIcon className={classes.rightIcon}/>
                     </Button>
+                </Tooltip>
                 </label>
                 <Button id="input-file-button">
                     <span id="input-file-name"></span>
