@@ -2,18 +2,16 @@
 <h1 align="center">OPEN DATA EDITOR</h1>
 <h4 align="center">Opendata Developer Network</h4>
 
-### Overview
-Canadians throw away an average of $854 per person each year of unused food. A key factor to this
-problem is that shoppers do not know how much to buy when grocery shopping. Our web based application JustPerfect will provide the estimated measurement for each meal on a weekly basis, cutting down the excess food bought by consumers each day.
+### Project Description
+ODEN (Open Data Developer Network) is a novel system for helping developers easily find and consume Open Data in their mobile apps or websites. Open Data is data that can be freely used  re-used and redistributed by anyone.  ODEN's developer community needs a wealth of Open Data to exist from a variety of sources for the apps they develop. The issue we have is that not all of those who want to supply Open Data understand the format Open Data requires. The goal of this project is to create an Open Data Editor to make this process easier. ODEN makes use of schemas <a href="http://json-schema.org/">JSON Schema</a> to describe what Open Data looks like. The Open Data Editor will allow those with limited technical knowledge to easily create/edit Open Data without needing to understand these underlying schemas.  The Open Data Editor will be a dynamic web form that is built from the selected schema and needs to show an HTML representation of the data in an easy to understand visual as it is being put in
 
-This document will walk you through the process of setting up and creating the application of Team 7.
+This document will walk you through the process of setting up and creating the application of Team 3.
 
 ### Members
-* <a href="https://github.com/HarjeevanBains">[J]eevan Bains</a>
-* <a href="https://github.com/mikah13">[M]ike Hoang</a>
-* <a href="https://github.com/crastwam">[A]ndrew Yang</a>
-* <a href="https://github.com/Antoniocao">[A]ntonio Cao Shen (C)</a>
-* <a href="https://github.com/nirajan-manandhar">[N]irajan Manandhar</a>
+* <a href="https://github.com/apollo78124">Eunhak (David) Lee</a>
+* <a href="https://github.com/Greg-Mercer">Gregory Mercer</a>
+* <a href="https://github.com/hawawa">Hank Change</a>
+* <a href="https://github.com/mikah13">Mike Hoang</a>
 
 
 # Table of Contents
@@ -38,4 +36,9 @@ This document will walk you through the process of setting up and creating the a
 ## Social Login APIs
 
 ## Credit
-Special thanks to <a href="https://html5up.net/"> HTML5 UP</a>, <a href="https://codyhouse.co/">Code House</a> for the templates and <a href="https://spoonacular.com/">Spoonacular</a> for the Recipe APIs.
+Credit to:<br/>
+<a href="https://reactjs.org/">React Documentation</a>
+<br />
+<a href="https://material-ui.com">Material UI</a>
+<br />
+<a href="https://firebase.google.com/">Firebase hosting service</a>
