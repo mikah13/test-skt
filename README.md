@@ -75,11 +75,8 @@ Now if you want to update your application and upload everything to your hosted 
 ## Social Login APIs-->
 
 ## Credit
-Credit to:<br/>
+Credit to:
 * <a href="https://reactjs.org/">React Documentation</a>
-<br />
 * <a href="https://material-ui.com">Material UI</a>
-<br />
 * <a href="https://firebase.google.com/">Firebase hosting service</a>
-<br />
 * <a href="https://medium.com/@bensigo/hosting-your-react-app-with-firebase-hosting-add1fa08c214">Hosting Tutorial</a>
