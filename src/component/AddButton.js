@@ -13,9 +13,12 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
-
 import Tooltip from '@material-ui/core/Tooltip';
 
+/**
+ * Set Style for the Button
+ * @type {Object}
+ */
 const styles = {
     appBar: {
         position: 'relative'
@@ -27,10 +30,20 @@ const styles = {
 const margin = {
     margin: '0 0 0 0 '
 }
+
+/**
+ * Transition for opening the modal
+ * @param       {[type]} props [description]
+ * @constructor
+ */
 function Transition(props) {
     return <Slide direction="up" {...props}/>;
 }
 
+/**
+ * Class AddButton
+ * @extends React
+ */
 class AddButton extends React.Component {
     constructor(props) {
         super(props);
@@ -43,28 +56,48 @@ class AddButton extends React.Component {
         };
     }
 
+    /**
+     * Click event will open the modal.
+     * @return {[function]} Set open state to true
+     */
     handleClickOpen = () => {
         this.setState({open: true});
     };
 
+    /**
+     * Close event will close the modal.
+     * @return {[function]} Set open state to false
+     */
     handleClose = () => {
         this.setState({open: false});
 
     };
 
+    /**
+     * [handleAdd description]
+     * @param  {[type]} a [description]
+     * @return {[type]}   [description]
+     */
     handleAdd = a => {
         this.props.clickEvent(a);
         this.setState({
             open: false,
             obj: this.props.schema.reduce((a, b) => {
-                a[b] = '';
+                a[b] = "";
                 return a;
             }, {})
         });
     }
+
+    /**
+     * Live Update feature
+     * @param  {[type]} e
+     * @return {[function]}  Live update of input data
+     */
     handleInputChange = e => {
         let prop = e.target.id
 
+        // Incompleted Validation Feature
         if (e.target.name === "integer") {
             if (!e.target.value.slice(-1).match(/^[+-]?\d+$/)) {
                 e.target.value = e.target.value.substring(0, e.target.value.length - 1)
@@ -102,30 +135,46 @@ class AddButton extends React.Component {
 
         this.setState({obj: newObj})
     }
+
+    /**
+     * Generate input rows and labels for every single field
+     * @param  {[type]} a item label
+     * @param  {[type]} i index
+     * @return {[Grid]}  Grid item
+     */
     generateInput = (a, i) => {
-        //add type
         return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1)} type="" margin="normal" style={{
                 width: '50%',
                 marginLeft: '25%'
-
             }} onChange={this.handleInputChange
 }/></Grid>
 
     }
-    generateForm = _ => {
 
-        //need to be modified
+    /**
+     * Generate the entire form
+     * @param  {[type]} _ [description]
+     * @return {[type]}   [description]
+     */
+    generateForm = _ => {
         return this.props.schema.map((a, i) => {
-            // console.log(a);
             return this.generateInput(a, i);
 
         })
     }
 
+    /**
+     * Render main function
+     * @return {[type]} [description]
+     */
     render() {
         const {classes} = this.props;
-
         return (<div style={margin}>
+            {/**
+             * This part will render a Button
+             * @type {String}
+             */
+            }
             <Tooltip title="Add New">
                 <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
                     <AddIcon/>
@@ -133,6 +182,12 @@ class AddButton extends React.Component {
                 </Button>
             </Tooltip>
 
+            {
+                /**
+                 * This part will render the dialog that can be toggled
+                 * @type {Object}
+                 */
+            }
             <Dialog fullScreen={true} open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
@@ -146,7 +201,6 @@ class AddButton extends React.Component {
                             Add
                         </Button>
                     </Toolbar>
-
                 </AppBar>
                 <DialogContent>
                     <Grid container={true} justify="center">
@@ -170,4 +224,7 @@ AddButton.propTypes = {
     clickEvent: PropTypes.func.isRequired
 };
 
+/**
+ * Export Add Button. End of the class
+ */
 export default withStyles(styles)(AddButton);

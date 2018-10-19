@@ -14,7 +14,8 @@ import AddButton from './AddButton';
 import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
-
+import Edit from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 let counter = 0;
 let schema = [
     {
@@ -246,7 +247,12 @@ class EnhancedTable extends React.Component {
                                     return (<TableRow hover={true} onClick={event => this.handleClick(event, n.id)} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
                                         <TableCell padding="checkbox">
                                             <Checkbox checked={isSelected}/>
+
                                         </TableCell>
+                                        {/* <TableCell padding="checkbox">
+                                            <Button><Edit/></Button>
+                                        </TableCell> */}
+
                                         {this.generateTableData(n)}
                                     </TableRow>);
                                 })
