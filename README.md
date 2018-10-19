@@ -21,9 +21,6 @@ This document will walk you through the process of setting up and creating the a
 * [Technology Used](#technology-used)
 * [Getting Started](#getting-started)
 * [Firebase Hosting](#connect-mysql-and-php)
-<!-- * [Deploy on Azure](#deploy-on-azure)
-* [Fetch Recipe API](#fetch-recipe-api)
-* [Social Login APIs](#social-login-apis) -->
 * [Credit](#credit)
 
 
@@ -70,8 +67,8 @@ Hosting React on Firebase is really easy for new comers. All you have to do is f
 Now if you want to update your application and upload everything to your hosted website, run these 2 commands on your console:
 * ```$ npm start build```
 * ```$ firebase deploy```
-## Deploy on Azure
-<a href="https://blogs.msdn.microsoft.com/appserviceteam/2016/08/18/announcing-mysql-in-app-preview-for-web-apps/#mysqlconnect"> HERE </a>
+<!-- ## Deploy on Azure
+<a href="https://blogs.msdn.microsoft.com/appserviceteam/2016/08/18/announcing-mysql-in-app-preview-for-web-apps/#mysqlconnect"> HERE </a> -->
 
 <!-- ## Fetch Recipe API
 
@@ -84,3 +81,4 @@ Credit to:<br/>
 <a href="https://material-ui.com">Material UI</a>
 <br />
 <a href="https://firebase.google.com/">Firebase hosting service</a>
+<a href="https://medium.com/@bensigo/hosting-your-react-app-with-firebase-hosting-add1fa08c214">Hosting Tutorial</a>
