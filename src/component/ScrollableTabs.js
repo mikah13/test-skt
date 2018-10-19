@@ -30,6 +30,10 @@ const styles = theme => ({
     }
 });
 
+/**
+ * Make a Scrollable Tabs to display Schemas using Alphabetical order.
+ * @extends React
+ */
 class ScrollableTabs extends React.Component {
     constructor(props) {
         super(props);
@@ -38,13 +42,11 @@ class ScrollableTabs extends React.Component {
         };
 
     }
-
     handleChange = (event, value) => {
         this.setState({value});
     };
 
     generateTabs = _ => {
-
         return Array(26).fill('').map((a, b) => {
             return <Tab key={`tab-${b}`} label={String.fromCharCode(b + 65).toUpperCase()}/>;
         })
@@ -77,14 +79,6 @@ class ScrollableTabs extends React.Component {
                 </Tabs>
             </AppBar>
             {this.generateItems(value)}
-            {/* {value === 0 && <TabContainer>A</TabContainer>}
-        {value === 0 && <TabContainer>Item Two</TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
-        {value === 4 && <TabContainer>Item Five</TabContainer>}
-        {value === 5 && <TabContainer>Item Six</TabContainer>}
-        {value === 6 && <TabContainer>Item Seven</TabContainer>} */
-            }
         </div>);
     }
 }

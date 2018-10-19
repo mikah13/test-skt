@@ -72,10 +72,10 @@ class TableToolbar extends React.Component {
                                 <DeleteIcon/>
                             </Button>
                         </Tooltip>)
-                        : (<Tooltip title="Download">
+                        : (<Tooltip title="Export">
                             <Button onClick={()=>{
                                 this.props.download()
-                            }}aria-label="Download" variant="contained" color="secondary">
+                            }}aria-label="Export" variant="contained" color="secondary">
                                 <DownloadIcon/>
                             </Button>
                         </Tooltip>) // SET PROP AS OBJECT BASED ON DATA SCHEMA

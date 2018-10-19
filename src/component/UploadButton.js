@@ -18,7 +18,16 @@ const btnStyle = {
 const FILE_TYPE = ['json'];
 const UPLOAD_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 18 18"><path d="M13 14c0 2.21-1.79 4-4 4s-4-1.79-4-4V3c0-1.66 1.34-3 3-3s3 1.34 3 3v9c0 1.1-.9 2-2 2s-2-.9-2-2V4h1v8c0 .55.45 1 1 1s1-.45 1-1V3c0-1.1-.9-2-2-2s-2 .9-2 2v11c0 1.66 1.34 3 3 3s3-1.34 3-3V4h1v10z"/></svg>'
 
+/**
+ * Upload button which will create an upload event for JSON file
+ * @extends Component
+ */
 class UploadButton extends Component {
+    /**
+     * Render an upload button.
+     * @param  {[object]} evt file object
+     * @return {[output]}  Check if file type is supported
+     */
     changeEvent = evt => {
         let file = evt.target.files[0];
         let file_type = file.name.split('.')[1];
@@ -43,9 +52,9 @@ class UploadButton extends Component {
             <input className={classes.input} id="contained-button-file" multiple="multiple" type="file" onChange={this.changeEvent}/>
             <span>
                 <label htmlFor="contained-button-file">
-                        <Tooltip title="Upload">
+                        <Tooltip title="Import">
                     <Button variant="contained" color="default" component="span" className={classes.button}>
-                        <span style={btnStyle}>Upload</span>
+                        <span style={btnStyle}>IMPORT</span>
                         <CloudUploadIcon className={classes.rightIcon}/>
                     </Button>
                 </Tooltip>
