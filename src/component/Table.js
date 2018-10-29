@@ -14,8 +14,7 @@ import AddButton from './AddButton';
 import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
-import Edit from '@material-ui/icons/Edit';
-import Button from '@material-ui/core/Button';
+import EditButton from './EditButton';
 let counter = 0;
 
 /**
@@ -184,7 +183,6 @@ class EnhancedTable extends React.Component {
         const {selected} = this.state;
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
@@ -194,7 +192,6 @@ class EnhancedTable extends React.Component {
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1),);
         }
-
         this.setState({selected: newSelected});
     };
 
@@ -233,7 +230,16 @@ class EnhancedTable extends React.Component {
         newData.push(createData(arr, objToArray(this.state.items.properties)))
         this.setState({data: newData})
     }
-
+    handleSaveButton = a => {
+        let newData = this.state.data;
+        newData = newData.map(b => {
+            if (b.id === a.id) {
+                return a;
+            }
+            return b;
+        })
+        this.setState({data: newData})
+    }
     /**
      * Upload a file
      * @param  {[type]} a [description]
@@ -288,9 +294,9 @@ class EnhancedTable extends React.Component {
 
             {
                 /**
-     * This part will render the add and import buttons
-     * @type {Object}
-     */
+                * This part will render the add and import buttons
+                * @type {Object}
+                */
             }
             <Grid container={true} spacing={8} justify="space-between">
                 <Grid item={true}>
@@ -323,32 +329,21 @@ class EnhancedTable extends React.Component {
                     }} download={this.download}/>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-
-                        {
-                            /**
-                             * Table header
-                             * @type {Object}
-                             */
-                        }
                         <TableHeader numSelected={selected.length} onSelectAllClick={this.handleSelectAllClick} rowCount={data.length} rows={this.rows()}/>
-
-                        {
-                            /**
-                             * Main part of the table. This is where all the datas are displayed
-                             * @type {[type]}
-                             */
-                        }
                         <TableBody>
                             {
                                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                                     const isSelected = this.isSelected(n.id);
-                                    return (<TableRow hover={true} onClick={event => this.handleClick(event, n.id)} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
+                                    return (<TableRow hover={true} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
                                         <TableCell padding="checkbox">
-                                            <Checkbox checked={isSelected}/>
+                                            <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
+                                        </TableCell>
+                                        <TableCell padding="checkbox">
+                                            <EditButton clickEvent={this.handleSaveButton} schema={objToArray(this.state.items.properties)} data={n}/>
                                         </TableCell>
                                         {/* <TableCell padding="checkbox">
                                             <Button><Edit/></Button>
-                                        </TableCell> */
+                                            </TableCell> */
                                         }
 
                                         {this.generateTableData(n)}
@@ -368,7 +363,7 @@ class EnhancedTable extends React.Component {
 
                 {
                     /**
-                     * Table footer with pagination
+                     * Table
                      * @type {String}
                      */
                 }

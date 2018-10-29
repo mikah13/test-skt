@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,27 +8,21 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
-import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
+import Edit from '@material-ui/icons/Edit';
+import { withStyles } from '@material-ui/core/styles';
+import DialogContent from '@material-ui/core/DialogContent';
 
-/**
- * Set Style for the Button
- * @type {Object}
- */
 const styles = {
-    appBar: {
-        position: 'relative'
-    },
-    flex: {
-        flex: 1
-    }
-};
-const margin = {
-    margin: '0 0 0 0 '
-}
+     appBar: {
+         position: 'relative'
+     },
+     flex: {
+         flex: 1
+     }
+ };
 
 /**
  * Transition for opening the modal
@@ -41,16 +34,18 @@ function Transition(props) {
 }
 
 /**
- * Class AddButton
+ * Class EditButton
  * @extends React
  */
-class AddButton extends React.Component {
+class EditButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
-            obj: this.props.schema.reduce((a, b) => {
-                a[b] = '';
+            obj:
+            this.props.schema.reduce((a, b) => {
+
+                a[b] = this.props.data[b];
                 return a;
             }, {})
         };
@@ -69,13 +64,7 @@ class AddButton extends React.Component {
      * @return {[function]} Set open state to false
      */
     handleClose = () => {
-        this.setState({
-            open: false,
-            obj: this.props.schema.reduce((a, b) => {
-                a[b] = "";
-                return a;
-            }, {})
-        });
+        this.setState({open: false});
 
     };
 
@@ -84,12 +73,14 @@ class AddButton extends React.Component {
      * @param  {[type]} a [description]
      * @return {[type]}   [description]
      */
-    handleAdd = a => {
+    handleSave = a => {
+        a = JSON.parse(a);
+
+        a.id = this.props.data.id;
         this.props.clickEvent(a);
-        this.setState({open: false,obj: this.props.schema.reduce((a, b) => {
-            a[b] = "";
-            return a;
-        }, {})});
+        this.setState({
+            open: false
+        });
     }
 
     /**
@@ -114,24 +105,6 @@ class AddButton extends React.Component {
             }
         }
 
-        //For email
-        // if (e.target.name == "email"){
-        //     if (e.target.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-        //         validation = true;
-        //     } else {
-        //         validation = false;
-        //     }
-        // }
-
-        //For required
-        // if (e.target.required){
-        //     if (e.target.value != ""){
-        //         validation = true;
-        //     } else {
-        //         validation = false;
-        //     }
-        // }
-
         let newData = e.target.value;
         let newObj = this.state.obj;
         newObj[prop] = newData;
@@ -146,11 +119,10 @@ class AddButton extends React.Component {
      * @return {[Grid]}  Grid item
      */
     generateInput = (a, i) => {
-        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()} type="" margin="normal" style={{
+        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1)} type="" margin="normal" style={{
                 width: '50%',
                 marginLeft: '25%'
-            }} onChange={this.handleInputChange
-}/></Grid>
+            }} onChange={this.handleInputChange} defaultValue={this.props.data[a]}/></Grid>
 
     }
 
@@ -172,38 +144,25 @@ class AddButton extends React.Component {
      */
     render() {
         const {classes} = this.props;
-        return (<div style={margin}>
-            {/**
-             * This part will render a Button
-             * @type {String}
-             */
-            }
-            <Tooltip title="Add New">
-                <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
-                    <AddIcon/>
-                    Add
-                </Button>
-            </Tooltip>
 
-            {
-                /**
-                 * This part will render the dialog that can be toggled
-                 * @type {Object}
-                 */
-            }
+        return (<div>
+
+                <IconButton aria-label="Edit" onClick={this.handleClickOpen}>
+                    <Edit />
+                </IconButton>
             <Dialog fullScreen={true} open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
-                            <CloseIcon/>
-                        </IconButton>
-                        <Typography variant="title" color="inherit" className={classes.flex}>
-                            New Entry
-                        </Typography>
-                        <Button color="inherit" onClick={() => this.handleAdd(document.getElementById('code').innerText)}>
-                            Add
-                        </Button>
-                    </Toolbar>
+                <Toolbar>
+                    <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography variant="title" color="inherit" className={classes.flex}>
+                        Edit
+                    </Typography>
+                    <Button color="inherit" onClick={() => this.handleSave(document.getElementById('code').innerText)}>
+                        Save
+                    </Button>
+                </Toolbar>
                 </AppBar>
                 <DialogContent>
                     <Grid container={true} justify="center">
@@ -217,17 +176,16 @@ class AddButton extends React.Component {
 
                 </DialogContent>
             </Dialog>
-
         </div>);
     }
 }
 
-AddButton.propTypes = {
-    classes: PropTypes.object.isRequired,
-    clickEvent: PropTypes.func.isRequired
+EditButton.propTypes = {
+    classes: PropTypes.object.isRequired
+
 };
 
 /**
  * Export Add Button. End of the class
  */
-export default withStyles(styles)(AddButton);
+export default withStyles(styles)(EditButton);

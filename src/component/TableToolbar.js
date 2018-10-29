@@ -9,7 +9,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import DownloadIcon from '@material-ui/icons/Archive';
 import Button from '@material-ui/core/Button';
-
+import IconButton from '@material-ui/core/IconButton';
 /**
  * Style Setting for TableToolbar
  * @param  {[type]} theme [description]
@@ -73,11 +73,12 @@ class TableToolbar extends React.Component {
                             </Button>
                         </Tooltip>)
                         : (<Tooltip title="Export">
-                            <Button onClick={()=>{
-                                this.props.download()
-                            }}aria-label="Export" variant="contained" color="secondary">
+                            <IconButton aria-label="Export" onClick={() => {
+                                    this.props.download()
+                                }} variant="fab" color="secondary">
                                 <DownloadIcon/>
-                            </Button>
+                            </IconButton>
+
                         </Tooltip>) // SET PROP AS OBJECT BASED ON DATA SCHEMA
                 }
             </div>
@@ -88,7 +89,7 @@ TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
     delete: PropTypes.func.isRequired,
-    download:PropTypes.func.isRequired
+    download: PropTypes.func.isRequired
 };
 
 export default withStyles(toolbarStyles)(TableToolbar);

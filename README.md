@@ -48,7 +48,7 @@ Then you can start the application by running:
 Hosting React on Firebase is really easy for new comers. All you have to do is following a few steps below:
 * <b>Step 1</b>: Install Firebase: ```$ npm install -g firebase-tools```
 
-* <b>Step 2</b>: Login into Firebase: ```firebase login``` then run this command ```firebase init``` to initialize Firebase hosting environment. Now everything will be totally on the console GUI.
+* <b>Step 2</b>: Login into Firebase: ```$ firebase login``` then run this command ```$ firebase init``` to initialize Firebase hosting environment. Now everything will be totally on the console GUI.
 
 * <b>Step 3</b>: Select the Firebase features you want to use. Database and Hosting are selected by default — all you need to do is press ```Enter``` to go to the next step.
 

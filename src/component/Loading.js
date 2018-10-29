@@ -9,6 +9,11 @@ const styles = theme => ({
     }
 });
 
+/**
+ * Loading class that creates loading animation
+ * @param       {[type]} props [description]
+ * @constructor
+ */
 function Loading(props) {
     const {classes} = props;
     return (<div>

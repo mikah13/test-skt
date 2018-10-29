@@ -18,7 +18,9 @@ class TableHeader extends React.Component {
                 <TableCell padding="checkbox">
                     <Checkbox indeterminate={numSelected > 0 && numSelected < rowCount} checked={numSelected === rowCount && rowCount !== 0} onChange={onSelectAllClick}/>
                 </TableCell>
-
+                <TableCell padding="checkbox" >
+                EDIT
+                </TableCell>
                 {
                     /**
                  * Unimplemented Editing Feature
