@@ -146,7 +146,7 @@ class AddButton extends React.Component {
      * @return {[Grid]}  Grid item
      */
     generateInput = (a, i) => {
-        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()} type="" margin="normal" style={{
+        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a} type="" margin="normal" style={{
                 width: '50%',
                 marginLeft: '25%'
             }} onChange={this.handleInputChange
