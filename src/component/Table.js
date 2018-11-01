@@ -15,39 +15,10 @@ import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
 import EditButton from './EditButton';
+import json_data from '../schemas/Public Art';
+
 let counter = 0;
 
-/**
- * Tested schema
- * @type {Array}
- */
-let schema = [
-    {
-        field: 'name',
-        type: 'string',
-        required: true
-    }, {
-        field: 'latitude',
-        type: 'string',
-        required: true
-    }, {
-        field: 'longitude',
-        type: 'string',
-        required: true
-    }, {
-        field: 'phone',
-        type: 'integer',
-        required: false
-    }, {
-        field: 'artist',
-        type: 'string',
-        required: false
-    }, {
-        field: 'e-mail',
-        type: 'email',
-        required: false
-    }
-];
 
 /**
  * Convert arg based on schem to obj type that work with the table
@@ -56,6 +27,8 @@ let schema = [
  * @return {[type]}        [description]
  */
 function createData(arg, schema) {
+    console.log(arg);
+    console.log(schema);
     let obj = {}
     schema.forEach((e, i) => {
         obj[e] = arg[i]
@@ -74,10 +47,15 @@ function objToArray(obj) {
     for (let val in obj) {
         arr.push(val);
     }
-
     return arr;
 }
-
+function toPropArray(obj){
+    let arr = [];
+    for (let val in obj) {
+        arr.push(obj[val]);
+    }
+    return arr;
+}
 /**
  * Encode URL
  * @param  {[type]} schema [description]
@@ -105,29 +83,137 @@ const styles = theme => ({
  * @extends React
  */
 class EnhancedTable extends React.Component {
-    /**
-     * Constructor for the Table
-     * selected for an array of selected items
-     * data for an array of created rows
-     * page: number of pages currently needed
-     * rowsPerPage: number of rows per page needed
-     * items
-     * isLoaded:
-     * @param {[type]} props
-     */
+
     constructor(props) {
         super(props);
         this.state = {
             selected: [],
             data: [
-                // createData([
-                //     'BCIT',
-                //     123,
-                //     123,
-                //     '604-123-1234',
-                //     'BCIT',
-                //     'Open'
-                // ]),  CHANGE DATA CREATED HERE
+                {   "id":1,
+                "properties": {
+                    "TitleOfWork": {
+                        "type": "string",
+                        "example": "Pump House Mural"
+                        ,"value":"MEO MEO"
+                    },
+                    "Latitude": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90,
+                        "value":123
+                    },
+                    "Longitude": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                    },
+                    "Description": {
+                        "description": "The description for a piece of public art",
+                        "type": "string"
+                        ,"value":"MEO MEO"
+                    },
+                    "ArtType": {
+                        "description": "The type of art, eg painting, sculpture",
+                        "type": "string"
+                    },
+                    "Dimensions": {
+                        "description": "Physical dimensions of the public art pieces",
+                        "type": "string"
+                    },
+                    "Medium": {
+                        "description": "The art medium used for the art piece",
+                        "type": "string"
+                    },
+                    "InstallDate": {
+                        "description": "The date the public art piece was installed",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "StreetAddress": {
+                        "type": "string",
+                        "example": "123 West Rd"
+                    },
+                    "Unit": {
+                        "type": "string",
+                        "example": "Unit 500"
+                    },
+                    "City": {
+                        "type": "string",
+                        "example": "New Westminster"
+                    },
+                    "Province": {
+                        "type": "string",
+                        "example": "BC"
+                    },
+                    "PostalCode": {
+                        "type": "string",
+                        "example": "5V6 3E8"
+                    },
+                    "PhoneNumber": {
+                        "type": "integer",
+                        "pattern": "^[0-9]+$",
+                        "example": 1234567891
+                    },
+                    "Description": {
+                        "type": "string",
+                        "example": "\"Puzzled,\" (2013) by artist Steve Hornung brightens the side of an otherwise drab pump house. The mural features a boy with a slingshot, three moose, and interlocking puzzle pieces."
+                    },
+                    "SiteName": {
+                        "description": "The name of the site where the public art piece is located",
+                        "type": "string"
+                    },
+                    "Status": {
+                        "description": "Status of the public art piece",
+                        "type": "string",
+                        "example": "In place"
+                    },
+                    "Ownership": {
+                        "description": "The owner of the public art piece",
+                        "type": "string"
+                    },
+                    "Images": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "URL": {
+                                    "type": "string",
+                                    "example": "https://www.toronto.ca/wp-content/uploads/2017/08/9602-bergeron2.jpg"
+                                },
+                                "photoCredit": {
+                                    "type": "string",
+                                }
+                            }
+                        }
+                    },
+                    "Artist": {
+                        "type": "object",
+                        "properties": {
+                            "FirstName": {
+                                "description": "The artist's first name.",
+                                "type": "string"
+                            },
+                            "LastName": {
+                                "description": "The artist's last name.",
+                                "type": "string"
+                            },
+                            "Country": {
+                                "description": "The artist's country of residence.",
+                                "type": "string"
+                            },
+                            "Email": {
+                                "description": "The artist's email address.",
+                                "type": "string",
+                                "pattern": "^@$"
+                            },
+                            "Website": {
+                                "description": "The URL for the artist's website.",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                }
             ],
             page: 0,
             rowsPerPage: 5,
@@ -136,18 +222,15 @@ class EnhancedTable extends React.Component {
         };
         this.timer = null;
     }
+
     componentWillUnmount() {
         clearTimeout(this.timer);
     }
 
-    /**
-     * Call API to get JSON file based on schemas
-     * @return {[type]} [description]
-     */
     componentDidMount() {
         let url = 'https://raw.githubusercontent.com/OpendataDeveloperNetwork/oden-schemas/master/schemas/' + encode(this.props.match.params.schema);
         fetch(url).then(res => res.json()).then((result) => {
-            this.timer = setTimeout(() => this.setState({isLoaded: true, items: result}), 900);
+            this.timer = setTimeout(() => this.setState({isLoaded: true, items: json_data.items}), 900);
         }, (error) => {
             this.setState({isLoaded: true, error});
         })
@@ -164,11 +247,6 @@ class EnhancedTable extends React.Component {
         }
     })
 
-    /**
-     * Select all the current rows in the table
-     * @param  {[type]} event [description]
-     * @return {[type]}       [description]
-     */
     handleSelectAllClick = event => {
         if (event.target.checked) {
             this.setState(state => ({
@@ -205,32 +283,37 @@ class EnhancedTable extends React.Component {
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-    generateTableCell = (a, b) => {
-        return <TableCell numeric={false} key={b}>{a}</TableCell>
+    generateTableCell = (a, b,c ,d) => {
+        let prop = a[b];
+        console.log(this.state.items);
+        if(prop.type=="string" || prop.type=="number")
+            return <TableCell numeric={false} key={c}>{prop.value}</TableCell>
+        else
+            return <EditButton clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={d} />
     };
+
     generateTableData = obj => {
-        return objToArray(this.state.items.properties).map((e, i) => {
-            return this.generateTableCell(obj[e], i);
+        console.log(obj);
+
+        return objToArray(obj.properties).map((e, i) => {
+
+            return this.generateTableCell(obj.properties, e,  i,obj);
         })
     }
 
-    /**
-     * Add new record
-     * @param  {[type]} a [description]
-     * @return {[type]}   [description]
-     */
-    handleAddButton = a => {
+    add = a => {
+
         let newData = this.state.data;
         a = JSON.parse(a);
         let arr = [];
         for (let val in a) {
             arr.push(a[val])
         }
-
         newData.push(createData(arr, objToArray(this.state.items.properties)))
         this.setState({data: newData})
     }
-    handleSaveButton = a => {
+
+    save = a => {
         let newData = this.state.data;
         newData = newData.map(b => {
             if (b.id === a.id) {
@@ -240,12 +323,8 @@ class EnhancedTable extends React.Component {
         })
         this.setState({data: newData})
     }
-    /**
-     * Upload a file
-     * @param  {[type]} a [description]
-     * @return {[type]}   [description]
-     */
-    handleUpload = a => {
+
+    upload = a => {
         let data = JSON.parse(a);
         let newData = this.state.data;
         data.forEach(el => {
@@ -255,10 +334,6 @@ class EnhancedTable extends React.Component {
         this.setState({data: newData})
     }
 
-    /**
-     * Download/Export
-     * @return {[type]} [description]
-     */
     download = () => {
         let downloadData = this.state.data.map(a => {
             delete a.id;
@@ -279,10 +354,6 @@ class EnhancedTable extends React.Component {
 
     }
 
-    /**
-     * Render the UI
-     * @return {[type]} [description]
-     */
     render() {
         const {classes} = this.props;
         const {data, selected, rowsPerPage, page} = this.state;
@@ -292,41 +363,23 @@ class EnhancedTable extends React.Component {
         }
         return (<div>
 
-            {
-                /**
-                * This part will render the add and import buttons
-                * @type {Object}
-                */
-            }
             <Grid container={true} spacing={8} justify="space-between">
                 <Grid item={true}>
-                    <AddButton className="add-button" clickEvent={this.handleAddButton} schema={objToArray(this.state.items.properties)}/>
+                    <AddButton className="add-button" clickEvent={this.add} schema={objToArray(this.state.items.properties)}/>
                 </Grid>
                 <Grid item={true}>
-                    <UploadButton uploadFile={this.handleUpload}/>
+                    <UploadButton uploadFile={this.upload}/>
                 </Grid>
             </Grid>
 
-            {
-                /**
-                 * This part will render the table
-                 * @type {Object}
-                 */
-            }
             <Paper className={classes.root}>
-
-                {
-                    /**
-                     * This part will render the table heading and export button
-                     * @type {Object}
-                     */
-                }
                 <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema} delete={() => {
                         let newData = data.filter((a, b) => {
                             return selected.indexOf(a.id) === -1;
                         })
                         this.setState({data: newData, selected: []})
                     }} download={this.download}/>
+
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <TableHeader numSelected={selected.length} onSelectAllClick={this.handleSelectAllClick} rowCount={data.length} rows={this.rows()}/>
@@ -339,12 +392,8 @@ class EnhancedTable extends React.Component {
                                             <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
                                         </TableCell>
                                         <TableCell padding="checkbox">
-                                            <EditButton clickEvent={this.handleSaveButton} schema={objToArray(this.state.items.properties)} data={n}/>
+                                            <EditButton clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={n}/>
                                         </TableCell>
-                                        {/* <TableCell padding="checkbox">
-                                            <Button><Edit/></Button>
-                                            </TableCell> */
-                                        }
 
                                         {this.generateTableData(n)}
                                     </TableRow>);
@@ -354,19 +403,12 @@ class EnhancedTable extends React.Component {
                                 emptyRows > 0 && (<TableRow style={{
                                         height: 49 * emptyRows
                                     }}>
-                                    <TableCell colSpan={Object.keys(this.state.items.properties).length + 1}/>
+                                    <TableCell colSpan={Object.keys(this.state.items.properties).length + 2}/>
                                 </TableRow>)
                             }
                         </TableBody>
                     </Table>
                 </div>
-
-                {
-                    /**
-                     * Table
-                     * @type {String}
-                     */
-                }
                 <CustomPagination component="div" className="tablePagination" count={data.length} rowsPerPage={rowsPerPage} page={page} backIconButtonProps={{
                         'aria-label' : 'Previous Page'
                     }} nextIconButtonProps={{

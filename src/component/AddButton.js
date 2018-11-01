@@ -14,6 +14,10 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 /**
  * Set Style for the Button
@@ -146,12 +150,14 @@ class AddButton extends React.Component {
      * @return {[Grid]}  Grid item
      */
     generateInput = (a, i) => {
-        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}><TextField key={`tf-${i}`} id={a} label={a} type="" margin="normal" style={{
+
+        return <Grid item={true} lg={7} xs={12} key={`gi-${i}`}>
+        <TextField key={`tf-${i}`} id={a} label={a} type="" margin="normal" style={{
                 width: '50%',
                 marginLeft: '25%'
             }} onChange={this.handleInputChange
-}/></Grid>
-
+}/>
+</Grid>
     }
 
     /**
