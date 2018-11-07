@@ -61,7 +61,15 @@ class TableToolbar extends React.Component {
                         </Typography>)
                 }
             </div>
+
+
             <div className={classes.spacer}/>
+        {    // <Tooltip title="Export these datasets to your computer as a JSON file. If there are no data, empty JSON will be downloaded.">
+            //                                 <IconButton bsSize="xsmall" bsStyle="link">
+            //                                     ?
+            //                                 </IconButton>
+            //                             </Tooltip>
+        }
             <div className={classes.actions}>
                 {
                     numSelected > 0
@@ -72,7 +80,8 @@ class TableToolbar extends React.Component {
                                 <DeleteIcon/>
                             </Button>
                         </Tooltip>)
-                        : (<Tooltip title="Export">
+                        : (
+                            <Tooltip title="Export">
                             <IconButton aria-label="Export" onClick={() => {
                                     this.props.download()
                                 }} variant="fab" color="secondary">

@@ -52,6 +52,7 @@ class Index extends Component {
             <Grid container={true} spacing={8} direction="column" alignItems="center" justify="center">
                 <ScrollableTabs data={this.state.items}/>
             </Grid>
+                    
         </div>)
     }
 }

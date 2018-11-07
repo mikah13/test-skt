@@ -51,14 +51,14 @@ class UploadButton extends Component {
         return (<div>
             <input className={classes.input} id="contained-button-file" multiple="multiple" type="file" onChange={this.changeEvent}/>
             <span>
-                <label htmlFor="contained-button-file">
+
                         <Tooltip title="Import">
                     <Button variant="contained" color="default" component="span" className={classes.button}>
                         <span style={btnStyle}>IMPORT</span>
                         <CloudUploadIcon className={classes.rightIcon}/>
                     </Button>
                 </Tooltip>
-                </label>
+        
                 <Button id="input-file-button">
                     <span id="input-file-name"></span>
                 </Button>
