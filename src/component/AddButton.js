@@ -184,6 +184,12 @@ class AddButton extends React.Component {
                     Add
                 </Button>
             </Tooltip>
+            <Tooltip title="With this 'Add' button, you can fill the input fields to create a new JSON dataset. After creating a new dataset, it can be downloaded as
+                a JSON file. Hover over on the 'Export' icon on the far right to download the JSON file on your computer.">
+                <Button bsSize="small" bsStyle="link">
+                    ?
+                </Button>
+            </Tooltip>
 
             {
                 /**

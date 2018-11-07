@@ -52,6 +52,11 @@ class UploadButton extends Component {
             <input className={classes.input} id="contained-button-file" multiple="multiple" type="file" onChange={this.changeEvent}/>
             <span>
                 <label htmlFor="contained-button-file">
+                <Tooltip title="'Import' button, you can select a JSON file from your computer and view them on this website. Imported files can be edited and uploaded on the ODEN database.">
+                <Button bsSize="xsmall" bsStyle="link">
+                    ?
+                </Button>
+            </Tooltip>
                         <Tooltip title="Import">
                     <Button variant="contained" color="default" component="span" className={classes.button}>
                         <span style={btnStyle}>IMPORT</span>
