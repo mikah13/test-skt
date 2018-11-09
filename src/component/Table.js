@@ -10,11 +10,11 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableHeader from './TableHeader';
 import TableToolbar from './TableToolbar';
-import AddButton from './AddButton';
+import Add from './Add';
 import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
-import EditButton from './EditButton';
+import Edit from './Edit';
 import json_data from '../schemas/Public Art';
 
 let counter = 0;
@@ -162,12 +162,16 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     generateTableCell = (a, b,c) => {
-
+        console.log(a);
         let prop = a.properties[b];
         if(prop.type!=="array" && prop.type!=="object"){
             return <TableCell numeric={false} key={c}>{this.state.data[a.id].properties[b].value}</TableCell>
         }
-        return <TableCell numeric={false} key={c}><EditButton clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={a} /></TableCell>
+        return <TableCell numeric={false} key={c}>
+        {
+            //<Edit clickEvent={this.save} schema={this.state.items} data={a} />
+        }
+        </TableCell>
     };
 
     generateTableData = obj => {
@@ -251,7 +255,7 @@ class EnhancedTable extends React.Component {
 
             <Grid container={true} spacing={8} justify="space-between">
                 <Grid item={true}>
-                    <AddButton className="add-button" clickEvent={this.add} schema={this.state.items}/>
+                    <Add className="add-button" clickEvent={this.add} schema={this.state.items}/>
                 </Grid>
                 <Grid item={true}>
                     <UploadButton uploadFile={this.upload}/>
@@ -275,7 +279,8 @@ class EnhancedTable extends React.Component {
                                             <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
                                         </TableCell>
                                         <TableCell padding="checkbox">
-                                            <EditButton clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={n}/>
+                                        <Edit clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={n}/>
+
                                         </TableCell>
 
                                         {this.generateTableData(n)}

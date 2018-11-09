@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import 'babel-polyfill';
 import Grid from '@material-ui/core/Grid';
 import ScrollableTabs from './ScrollableTabs';
 import Loading from './Loading';
@@ -52,7 +53,7 @@ class Index extends Component {
             <Grid container={true} spacing={8} direction="column" alignItems="center" justify="center">
                 <ScrollableTabs data={this.state.items}/>
             </Grid>
-                    
+
         </div>)
     }
 }

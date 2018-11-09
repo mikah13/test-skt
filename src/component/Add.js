@@ -53,10 +53,12 @@ function isObject(type){
     return type === "object";
 }
 
-function renderNumber(){
-    return 0;
+function renderNumber(a){
+
+    return "";
 }
-function renderString(){
+function renderString(a){
+    console.log(a);
     return "";
 }
 
@@ -87,10 +89,10 @@ function renderObject(obj){
     for(let prop in obj){
         let type = obj[prop].type;
         if(isNumber(type)){
-            object[prop] = renderNumber();
+            object[prop] = renderNumber(obj[prop]);
         }
         if(isString(type)){
-            object[prop] = renderString();
+            object[prop] = renderString(obj[prop]);
         }
         if(isObject(type)){
             object[prop]= renderObject(obj[prop].properties)
@@ -105,10 +107,10 @@ function renderObject(obj){
 function render(object){
 
     if(isNumber(object.type)){
-        return renderNumber()
+        return renderNumber(object)
     }
     if(isString(object.type)){
-        return renderString()
+        return renderString(object)
     }
     if(isObject(object.type)){
         return renderObject(object.properties)
@@ -118,10 +120,10 @@ function render(object){
     }
 }
 /**
- * Class AddButton
+ * Class Add
  * @extends React
  */
-class AddButton extends React.Component {
+class Add extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -459,7 +461,7 @@ class AddButton extends React.Component {
 }
 
 
-AddButton.propTypes = {
+Add.propTypes = {
     classes: PropTypes.object.isRequired,
     clickEvent: PropTypes.func.isRequired
 };
@@ -467,4 +469,4 @@ AddButton.propTypes = {
 /**
  * Export Add Button. End of the class
  */
-export default withStyles(styles)(AddButton);
+export default withStyles(styles)(Add);
