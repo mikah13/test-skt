@@ -139,6 +139,8 @@ class Add extends React.Component {
             data:
                 render(this.props.schema)
             ,
+            message:
+                render(this.props.schema)
 
         };
         console.log(this.state.data);
@@ -210,45 +212,62 @@ class Add extends React.Component {
     handleInputChange = (e,a,parents) => {
         // e has example, data type and the title of the field
         // let example = a.example;
-        let type = a.type;
         let value = e.target.value;
+        let required = e.target.required;
         let prop = a.title;
+        let type = a.type;
+        let minimum = a.minimum; 
+        let maximum = a.maximum;
+        let pattern = a.pattern;
+
         // TODO: HANDLE VALIDATION HERE
         // ONLY FOR STRING- NUMBER AND integer
         // FOR STRING USE PATTERN IF NEEDED
         // FOR NUMBER USE MAX MIN IF NEEDED
         // DON'T FORGET REQUIRED
-        // Incompleted Validation Feature
+
+        let helperText = " ";
+        
+        // integer
         if (type === "integer") {
-            if (!value.slice(-1).match(/^[+-]?\d+$/)) {
-                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+            if (!value.match(/^[+-]?\d+$/) && value!=="") {
+                helperText = helperText + "Should be an integer. ";
             }
         }
 
-        //For double (number)
-        if (e.target.name === "number") {
-            if (!e.target.value.slice(-1).match(/^[+-]?\d+(\.\d+)?$/)) {
-                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+        // number
+        if (type === "number") {
+            if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
+                helperText = helperText + "Should be a number. ";
             }
         }
 
-        //For email
-        // if (e.target.name == "email"){
-        //     if (e.target.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-        //         validation = true;
-        //     } else {
-        //         validation = false;
-        //     }
-        // }
+        // min and max
+        if(typeof minimum !== 'undefined' && value!==""){
+            if(value < minimum){
+                helperText = helperText + "Should not be less than " + minimum + ". ";
+            }
+        }
+        if(typeof maximum !== 'undefined' && value!==""){
+            if(value > maximum){
+                helperText = helperText + "Should not be greater than " + maximum + ". ";
+            }
+        }
 
         //For required
-        // if (e.target.required){
-        //     if (e.target.value != ""){
-        //         validation = true;
-        //     } else {
-        //         validation = false;
-        //     }
-        // }
+        if (required){
+            if (value === ""){
+                helperText = helperText + "Required value. ";
+            }
+        }
+
+        // pattern
+        if(typeof pattern !== 'undefined'){
+            if (!value.match(pattern) && value!=="") {
+                helperText = helperText + "Invaliad value. ";
+            }
+        }
+
         let newData = this.state.data;
         let target = newData
         if(parents.length>0){
@@ -258,6 +277,16 @@ class Add extends React.Component {
         }
         target[prop] = value;
         this.setState({data: newData})
+
+        let newMessage = this.state.message;
+        let t = newMessage;
+        if(parents.length>0){
+            parents.forEach(x => {
+                t = t[x];
+            })
+        }
+        t[prop] = helperText;
+        this.setState({message: newMessage})
     }
 
     generateTextField = (a,idx,s, parents) =>{
@@ -270,6 +299,17 @@ class Add extends React.Component {
             })
         }
         let value = data[prop];
+
+        let message = this.state.message;
+        if(parents.length > 0){
+            parents.forEach(x => {
+                message = message[x];
+            })
+        }
+        let helperText = message[prop];
+        if(helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
+            helperText = "Required value. ";
+        }
         return <div style={{paddingLeft: margin}}><TextField
                 key={`tf-${idx}`}
                 id={prop}
@@ -277,6 +317,7 @@ class Add extends React.Component {
                 label={prop}
                 type=""
                 value = {value}
+                helperText = {helperText}
                 margin="normal"
                 style={{
                 width: '50%',
