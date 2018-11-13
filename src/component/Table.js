@@ -10,44 +10,15 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableHeader from './TableHeader';
 import TableToolbar from './TableToolbar';
-import AddButton from './AddButton';
+import Add from './Add';
 import UploadButton from './UploadButton';
 import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
-import EditButton from './EditButton';
+import Edit from './Edit';
+import json_data from '../schemas/Public Art';
+
 let counter = 0;
 
-/**
- * Tested schema
- * @type {Array}
- */
-let schema = [
-    {
-        field: 'name',
-        type: 'string',
-        required: true
-    }, {
-        field: 'latitude',
-        type: 'string',
-        required: true
-    }, {
-        field: 'longitude',
-        type: 'string',
-        required: true
-    }, {
-        field: 'phone',
-        type: 'integer',
-        required: false
-    }, {
-        field: 'artist',
-        type: 'string',
-        required: false
-    }, {
-        field: 'e-mail',
-        type: 'email',
-        required: false
-    }
-];
 
 /**
  * Convert arg based on schem to obj type that work with the table
@@ -55,13 +26,16 @@ let schema = [
  * @param  {[type]} schema [description]
  * @return {[type]}        [description]
  */
-function createData(arg, schema) {
-    let obj = {}
-    schema.forEach((e, i) => {
-        obj[e] = arg[i]
-    })
-    obj.id = ++counter;
-    return obj;
+function createData(data, schema, len) {
+    let object = schema;
+    for(let prop in object){
+        object[prop].value = data[prop];
+    }
+    let newData = {
+        id: len,
+        properties:object
+    }
+    return newData;
 }
 
 /**
@@ -74,10 +48,16 @@ function objToArray(obj) {
     for (let val in obj) {
         arr.push(val);
     }
-
     return arr;
 }
 
+// function toPropArray(obj){
+//     let arr = [];
+//     for (let val in obj) {
+//         arr.push(obj[val]);
+//     }
+//     return arr;
+// }
 /**
  * Encode URL
  * @param  {[type]} schema [description]
@@ -105,29 +85,12 @@ const styles = theme => ({
  * @extends React
  */
 class EnhancedTable extends React.Component {
-    /**
-     * Constructor for the Table
-     * selected for an array of selected items
-     * data for an array of created rows
-     * page: number of pages currently needed
-     * rowsPerPage: number of rows per page needed
-     * items
-     * isLoaded:
-     * @param {[type]} props
-     */
+
     constructor(props) {
         super(props);
         this.state = {
             selected: [],
             data: [
-                // createData([
-                //     'BCIT',
-                //     123,
-                //     123,
-                //     '604-123-1234',
-                //     'BCIT',
-                //     'Open'
-                // ]),  CHANGE DATA CREATED HERE
             ],
             page: 0,
             rowsPerPage: 5,
@@ -135,19 +98,17 @@ class EnhancedTable extends React.Component {
             isLoaded: false
         };
         this.timer = null;
+
     }
+
     componentWillUnmount() {
         clearTimeout(this.timer);
     }
 
-    /**
-     * Call API to get JSON file based on schemas
-     * @return {[type]} [description]
-     */
     componentDidMount() {
         let url = 'https://raw.githubusercontent.com/OpendataDeveloperNetwork/oden-schemas/master/schemas/' + encode(this.props.match.params.schema);
         fetch(url).then(res => res.json()).then((result) => {
-            this.timer = setTimeout(() => this.setState({isLoaded: true, items: result}), 900);
+            this.timer = setTimeout(() => this.setState({isLoaded: true, items: json_data.items}), 900);
         }, (error) => {
             this.setState({isLoaded: true, error});
         })
@@ -164,11 +125,6 @@ class EnhancedTable extends React.Component {
         }
     })
 
-    /**
-     * Select all the current rows in the table
-     * @param  {[type]} event [description]
-     * @return {[type]}       [description]
-     */
     handleSelectAllClick = event => {
         if (event.target.checked) {
             this.setState(state => ({
@@ -205,32 +161,49 @@ class EnhancedTable extends React.Component {
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-    generateTableCell = (a, b) => {
-        return <TableCell numeric={false} key={b}>{a}</TableCell>
+    generateTableCell = (a, b,c) => {
+        console.log(a);
+        let prop = a.properties[b];
+        if(prop.type!=="array" && prop.type!=="object"){
+            return <TableCell numeric={false} key={c}>{this.state.data[a.id].properties[b].value}</TableCell>
+        }
+        return <TableCell numeric={false} key={c}>
+        {
+            //<Edit clickEvent={this.save} schema={this.state.items} data={a} />
+        }
+        </TableCell>
     };
+
     generateTableData = obj => {
-        return objToArray(this.state.items.properties).map((e, i) => {
-            return this.generateTableCell(obj[e], i);
+        return objToArray(obj.properties).map((e, i) => {
+            return this.generateTableCell(obj, e, i);
         })
     }
+    delete =  _=> {
+        let newData = this.state.data.filter((a, b) => {
+            return this.state.selected.indexOf(a.id) === -1;
+        })
+        newData.forEach((el,idx)=>{
+            el.id = idx;
+        })
+        console.log(newData);
+        this.setState({data: newData, selected: []})
 
-    /**
-     * Add new record
-     * @param  {[type]} a [description]
-     * @return {[type]}   [description]
-     */
-    handleAddButton = a => {
-        let newData = this.state.data;
-        a = JSON.parse(a);
-        let arr = [];
-        for (let val in a) {
-            arr.push(a[val])
-        }
-
-        newData.push(createData(arr, objToArray(this.state.items.properties)))
-        this.setState({data: newData})
     }
-    handleSaveButton = a => {
+    add = a => {
+
+        let newData = this.state.data;
+        let copy = JSON.parse(JSON.stringify(this.state.items.properties))
+        let len = newData.length;
+        newData.push(createData(a, copy, len))
+        //
+
+
+        this.setState({data: newData})
+
+    }
+
+    save = a => {
         let newData = this.state.data;
         newData = newData.map(b => {
             if (b.id === a.id) {
@@ -240,12 +213,8 @@ class EnhancedTable extends React.Component {
         })
         this.setState({data: newData})
     }
-    /**
-     * Upload a file
-     * @param  {[type]} a [description]
-     * @return {[type]}   [description]
-     */
-    handleUpload = a => {
+
+    upload = a => {
         let data = JSON.parse(a);
         let newData = this.state.data;
         data.forEach(el => {
@@ -255,10 +224,6 @@ class EnhancedTable extends React.Component {
         this.setState({data: newData})
     }
 
-    /**
-     * Download/Export
-     * @return {[type]} [description]
-     */
     download = () => {
         let downloadData = this.state.data.map(a => {
             delete a.id;
@@ -279,10 +244,6 @@ class EnhancedTable extends React.Component {
 
     }
 
-    /**
-     * Render the UI
-     * @return {[type]} [description]
-     */
     render() {
         const {classes} = this.props;
         const {data, selected, rowsPerPage, page} = this.state;
@@ -292,41 +253,20 @@ class EnhancedTable extends React.Component {
         }
         return (<div>
 
-            {
-                /**
-                * This part will render the add and import buttons
-                * @type {Object}
-                */
-            }
             <Grid container={true} spacing={8} justify="space-between">
                 <Grid item={true}>
-                    <AddButton className="add-button" clickEvent={this.handleAddButton} schema={objToArray(this.state.items.properties)}/>
+                    <Add className="add-button" clickEvent={this.add} schema={this.state.items}/>
                 </Grid>
                 <Grid item={true}>
-                    <UploadButton uploadFile={this.handleUpload}/>
+                    <UploadButton uploadFile={this.upload}/>
                 </Grid>
             </Grid>
 
-            {
-                /**
-                 * This part will render the table
-                 * @type {Object}
-                 */
-            }
             <Paper className={classes.root}>
-
-                {
-                    /**
-                     * This part will render the table heading and export button
-                     * @type {Object}
-                     */
-                }
                 <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema} delete={() => {
-                        let newData = data.filter((a, b) => {
-                            return selected.indexOf(a.id) === -1;
-                        })
-                        this.setState({data: newData, selected: []})
+                        this.delete()
                     }} download={this.download}/>
+
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <TableHeader numSelected={selected.length} onSelectAllClick={this.handleSelectAllClick} rowCount={data.length} rows={this.rows()}/>
@@ -339,12 +279,9 @@ class EnhancedTable extends React.Component {
                                             <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
                                         </TableCell>
                                         <TableCell padding="checkbox">
-                                            <EditButton clickEvent={this.handleSaveButton} schema={objToArray(this.state.items.properties)} data={n}/>
+                                        <Edit clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={n}/>
+
                                         </TableCell>
-                                        {/* <TableCell padding="checkbox">
-                                            <Button><Edit/></Button>
-                                            </TableCell> */
-                                        }
 
                                         {this.generateTableData(n)}
                                     </TableRow>);
@@ -354,25 +291,17 @@ class EnhancedTable extends React.Component {
                                 emptyRows > 0 && (<TableRow style={{
                                         height: 49 * emptyRows
                                     }}>
-                                    <TableCell colSpan={Object.keys(this.state.items.properties).length + 1}/>
+                                    <TableCell colSpan={Object.keys(this.state.items.properties).length + 2}/>
                                 </TableRow>)
                             }
                         </TableBody>
                     </Table>
                 </div>
-
-                {
-                    /**
-                     * Table
-                     * @type {String}
-                     */
-                }
                 <CustomPagination component="div" className="tablePagination" count={data.length} rowsPerPage={rowsPerPage} page={page} backIconButtonProps={{
                         'aria-label' : 'Previous Page'
                     }} nextIconButtonProps={{
                         'aria-label' : 'Next Page'
                     }} onChangePage={this.handleChangePage} onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
-
             </Paper>
         </div>);
     }

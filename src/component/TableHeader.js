@@ -22,17 +22,6 @@ class TableHeader extends React.Component {
                 EDIT
                 </TableCell>
                 {
-                    /**
-                 * Unimplemented Editing Feature
-                 * @type {String}
-                 */
-                }
-                {/* <TableCell padding="checkbox">
-
-                </TableCell> */
-                }
-
-                {
                     rows.map(row => {
                         return (<TableCell key={row.id} numeric={row.numeric} padding={'default'}>
                             {row.label}

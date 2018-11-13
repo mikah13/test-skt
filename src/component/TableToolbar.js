@@ -62,13 +62,14 @@ class TableToolbar extends React.Component {
                 }
             </div>
 
-                           
+
             <div className={classes.spacer}/>
- <Tooltip title="Export these datasets to your computer as a JSON file. If there are no data, empty JSON will be downloaded.">
-                                            <Button bsSize="xsmall" bsStyle="link">
-                                                ?
-                                            </Button>
-                                        </Tooltip>
+        {    // <Tooltip title="Export these datasets to your computer as a JSON file. If there are no data, empty JSON will be downloaded.">
+            //                                 <IconButton bsSize="xsmall" bsStyle="link">
+            //                                     ?
+            //                                 </IconButton>
+            //                             </Tooltip>
+        }
             <div className={classes.actions}>
                 {
                     numSelected > 0

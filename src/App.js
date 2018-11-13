@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import 'babel-polyfill';
 import Table from './component/Table';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import Index from './component/Index';

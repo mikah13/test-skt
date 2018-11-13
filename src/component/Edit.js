@@ -10,8 +10,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import Edit from '@material-ui/icons/Edit';
+// import Tooltip from '@material-ui/core/Tooltip';
+import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import DialogContent from '@material-ui/core/DialogContent';
 
@@ -34,10 +34,10 @@ function Transition(props) {
 }
 
 /**
- * Class EditButton
+ * Class Edit
  * @extends React
  */
-class EditButton extends React.Component {
+class Edit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -148,7 +148,7 @@ class EditButton extends React.Component {
         return (<div>
 
                 <IconButton aria-label="Edit" onClick={this.handleClickOpen}>
-                    <Edit />
+                    <EditIcon />
                 </IconButton>
             <Dialog fullScreen={true} open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -180,7 +180,7 @@ class EditButton extends React.Component {
     }
 }
 
-EditButton.propTypes = {
+Edit.propTypes = {
     classes: PropTypes.object.isRequired
 
 };
@@ -188,4 +188,4 @@ EditButton.propTypes = {
 /**
  * Export Add Button. End of the class
  */
-export default withStyles(styles)(EditButton);
+export default withStyles(styles)(Edit);
