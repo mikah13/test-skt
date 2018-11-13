@@ -1,0 +1,15 @@
+StrName,StrNum,OBJECTID,Name,Category,Neighbourhood,Zoning,Zone_Category,Owner,Surveyed,Site_Area,Relationship,SHAPE_Length,SHAPE_Area
+RICHMOND ST,331,57,Richard McBride Elementary,School,Victory Heights,P-1,Institutional,New Westminster School District #40,Y,18743.929688,P,561.2374463228647,18730.463830324043
+MCBRIDE BLVD,715,58,Justice Institute of BC,School,Glenbrooke South,P-2,Institutional,Justice Institute of BC,Y,49099.910156,P,899.8876549904708,49305.12732836731
+COURTNEY CRES,91,59,FW Howay Elementary,School,Victory Heights,P-1,Institutional,New Westminster School District #40,Y,16928.050781,P,689.7162324294231,17468.58688822266
+SALTER ST,921,60,Queen Elizabeth Elementary,School,Queensborough,P-1,Institutional,New Westminster School District #40,Y,17509.900391,P,686.1722322919723,18078.1239559867
+SALTER ST,833,61,Queensborough Middle,School,Queensborough,P-2,Institutional,New Westminster School District #40,Y,15934.540039,P,512.1869324557019,15874.267301956492
+LONDON ST,2201,62,Connaught Heights Elementary,School,Connaught Heights,P-1,Institutional,New Westminster School District #40,Y,8911.540039,P,389.87460114405974,8908.116734899166
+EIGHTH AVE,1714,63,Lord Tweedsmuir Elementary,School,Westend,P-1,Institutional,New Westminster School District #40,Y,20031.939453,P,622.896352480473,20009.70800487871
+EIGHTH ST,120,64,Ecole Fraser River Middle,School,Brow of the Hill,P-2,Institutional,New Westminster School District #40,Y,13407.299805,P,560.8801391792719,13182.371851013737
+HAMILTON ST,1010,66,Lord Kelvin Elementary,School,Kelvin,P-1,Institutional,New Westminster School District #40,Y,13078.700195,P,469.9123093562414,13073.740181591646
+PARK CRES,701,67,Glenbrook Middle,School,Glenbrooke North,P-1,Institutional,New Westminster School District #40,Y,5759.990234,P,306.3858625370934,5537.015062434991
+FADER ST,521,68,Hume Park Elementary (Closed),School,Sapperton,P-1,Institutional,New Westminster School District #40,Y,1889.650024,P,178.54833879091845,1888.2887075332355
+EIGHTH AVE,735,69,New Westminster Secondary,School,Kelvin,P-2,Institutional,New Westminster School District #40,Y,63079.769531,P,1455.4210899351467,63118.13233997096
+SECOND ST,605,70,Herbert Spencer Elementary,School,Glenbrooke North,P-1,Institutional,New Westminster School District #40,Y,12165.099609,P,472.9575449706608,12160.338636118795
+MERIVALE ST,85,278,Qayqayt Elementary,School,Downtown,P-2,INSTITUTIONAL,New Westminster School District #40,Y,12999.08984375,P,570.5548836541259,12965.660299975185

@@ -1,0 +1,24 @@
+1. 
+OBJECTID - int
+	
+ALTERNATE - string	
+ROUTENAME - string
+trip_headsign	
+	
+ROUTENO	BUSROUTE - int
+route_short_name - int
+	
+SHAPE_Length - int
+
+	
+CREATED_USER - string	
+CREATED_DATE - date
+LAST_EDITED_USER - string	
+LAST_EDITED_DATE - date
+	
+FREQUENTNETWORKFLAG - boolean
+
+COMMENTS - string	
+ALTERNATEFREQUENCYCOMMENT - string
+
+

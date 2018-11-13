@@ -1,52 +1,155 @@
-/* {
-    "type": "Feature",
-    "meta": {
-        "schema": "<url to schema>",
-        "title": "Public Art",
-    },
-    "geometry": {
-        "coordinates": {
-            "Lat": {
-                "title": "Lattitude",
-                "type": "double",
-                "example": 49.222
-            },
-            "Long": {
-                "title": "Longtitude",
-                "type": "double",
-                "example": 50.241
-            }
-        }
-    },
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/OpendataDeveloperNetwork/oden-schemas/blob/master/schemas/Public%20Art.json",
+  "title": "Public Art",
+  "type": "array",
+  "items": {
+    "type": "object",
     "properties": {
-        "id": {
-            "title":"ID",
-            "type": "integer",
-            "example": "1"
-        },
-        "CrossStreet": {
+      "titleOfWork": {
+        "type": "string",
+        "example": "Pump House Mural"
+      },
+      "latitude": {
+        "type": "number",
+        "minimum": -90,
+        "maximum": 90
+      },
+      "longitude": {
+        "type": "number",
+        "minimum": -180,
+        "maximum": 180
+      },
+      "details": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description for a piece of public art",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of art, eg painting, sculpture",
+            "type": "string"
+          },
+          "dimensions": {
+            "description": "Physical dimensions of the public art pieces",
+            "type": "string"
+          },
+          "medium": {
+            "description": "The art medium used for the art piece",
+            "type": "string"
+          },
+          "installDate": {
+            "description": "The date the public art piece was installed",
             "type": "string",
-            "example": "Buchanan Ave"
-        },
-        "BusStopNumber": {
-            "type": "integer",
-            "example": 53576
-        },
-        "Direction": {
+            "format": "date-time"
+          },
+          "description": {
             "type": "string",
-            "example": "SB"
-        },
-        "CityName": {
+            "example": "\"Puzzled,\" (2013) by artist Steve Hornung brightens the side of an otherwise drab pump house. The mural features a boy with a slingshot, three moose, and interlocking puzzle pieces."
+          },
+          "status": {
+            "description": "Status of the public art piece",
             "type": "string",
-            "example": "NEW WESTMINSTER"
-        },
-        "Accessible": {
-            "type": "string",
-            "example": "No"
-        },
-        "Status": {
-            "type": "string",
-            "example": "ACTIVE"
+            "example": "In place"
+          },
+          "ownership": {
+            "description": "The owner of the public art piece",
+            "type": "string"
+          }
         }
-    }
-} */
+      },
+      "location": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "object",
+            "properties": {
+              "streetAddress": {
+                "type": "string",
+                "example": "123 West Rd"
+              },
+              "unit": {
+                "type": "string",
+                "example": "Unit 500"
+              }
+            }
+          },
+          "city": {
+            "type": "string",
+            "example": "New Westminster"
+          },
+          "province": {
+            "type": "string",
+            "example": "BC"
+          },
+          "postalCode": {
+            "type": "string",
+            "example": "5V6 3E8"
+          },
+          "siteName": {
+            "description": "The name of the site where the public art piece is located",
+            "type": "string"
+          }
+        }
+      },
+      "phoneNumber": {
+        "type": "string",
+        "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$",
+        "example": "555-1212"
+      },
+      "images": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "imageURL": {
+              "type": "string",
+              "example": "https://www.toronto.ca/wp-content/uploads/2017/08/9602-bergeron2.jpg",
+              "format": "uri-reference"
+            },
+            "photoCredit": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "artist": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "description": "The artist's first name.",
+            "type": "string"
+          },
+          "lastName": {
+            "description": "The artist's last name.",
+            "type": "string"
+          },
+          "country": {
+            "description": "The artist's country of residence.",
+            "type": "string"
+          },
+          "email": {
+            "description": "The artist's email address.",
+            "type": "string",
+            "format": "email"
+          },
+          "website": {
+            "description": "The URL for the artist's website.",
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "bio": {
+            "description": "This artist's bio.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "required": [
+      "titleOfWork",
+      "latitude",
+      "longitude"
+    ]
+  }
+}
