@@ -1,0 +1,34 @@
+[{
+      "OBJECTID":1,
+        "SchoolName":"ST ANN'S ACADEMY SCHOOL",
+        "InstitutionCategory":"public school",
+        "SchoolType":"Elementary",
+        "Owner":"New Westminster School District #40y",
+        "Surveyed":true,
+        "Population":459,
+        "WebPageUrl":"url",
+     "userInfo": {
+          "CREATED_USER":"CCARRELLI",
+          "CREATED_DATE":"2018-05-10T16:57:48.000Z",
+          "LAST_EDITED_USER":"CCARRELLI",
+          "LAST_EDITED_DATE":"2018-05-10T16:57:48.000Z"
+      },
+    "LifeCycleStatus":"Active",
+    "locationData": {
+        "x":156,
+        "y":156,
+        "SHAPE_Area":457.8,
+        "SHAPE_Length":457.8,
+        "MAPID":457.8
+      },
+    "Address": {
+        "StreetName":"Jutland Rd",
+        "StreetNumber":3130,
+        "PostalCode":"V2S6X9",
+        "City":"New Westminster",
+        "Zone":"P-1",
+        "ZoneCategory":"Institutional",
+        "Neighborhood":"Victory Heights"
+      }
+    }
+]
