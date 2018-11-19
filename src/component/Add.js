@@ -141,24 +141,25 @@ class Add extends React.Component {
             ,
             message:
                 render(this.props.schema)
-
         };
-        console.log(this.state.data);
     }
     addArrayElement = parents =>{
-
         let schema = this.props.schema.properties;
         let data = this.state.data;
-        let cur = data;
+        let message = this.state.message;
+        let curData = data;
+        let curMessage = message;
         if(parents.length>0){
             parents.forEach(el=>{
-                cur = cur[el]
+                curData = curData[el]
+                curMessage = curMessage[el]
                 schema = schema[el]
             })
         }
         let newElement = render(schema.items)
-        cur.push(newElement);
-        this.setState({data:data})
+        curData.push(newElement);
+        curMessage.push(newElement);
+        this.setState({data:data, message:message})
     }
     deleteArrayElement = parents =>{
         let data = this.state.data;
@@ -216,7 +217,7 @@ class Add extends React.Component {
         let required = e.target.required;
         let prop = a.title;
         let type = a.type;
-        let minimum = a.minimum; 
+        let minimum = a.minimum;
         let maximum = a.maximum;
         let pattern = a.pattern;
 
@@ -227,7 +228,7 @@ class Add extends React.Component {
         // DON'T FORGET REQUIRED
 
         let helperText = " ";
-        
+
         // integer
         if (type === "integer") {
             if (!value.match(/^[+-]?\d+$/) && value!=="") {
@@ -264,7 +265,7 @@ class Add extends React.Component {
         // pattern
         if(typeof pattern !== 'undefined'){
             if (!value.match(pattern) && value!=="") {
-                helperText = helperText + "Invaliad value. ";
+                helperText = helperText + "Invalid value. ";
             }
         }
 
@@ -306,6 +307,7 @@ class Add extends React.Component {
                 message = message[x];
             })
         }
+
         let helperText = message[prop];
         if(helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
             helperText = "Required value. ";
@@ -325,17 +327,7 @@ class Add extends React.Component {
             }} onChange={(e)=>this.handleInputChange(e,a, parents)
         }/></div>
     }
-    // generateArray = (a,idx,s) =>{
-    //     return <form>
-    //     <TextField
-    //      name='title'
-    //      label='Array'
-    //      value={a.title}
-    //      margin='normal'
-    //      />
-    //
-    //     </form>
-    // }
+
      generateObject = (a,idx,s, parents) =>{
         let propArray = [];
         for(let prop in a.properties){
@@ -385,11 +377,6 @@ class Add extends React.Component {
                      }
                  }
 
-                 // for(let prop in a.properties){
-                 //
-                 //     a.properties[prop].title = prop;
-                 //     propArray.push(a.properties[prop])
-                 // }
                  let newParents = parents.slice();
                  newParents.push(a.title);
                  if(propArray.length === 0){
