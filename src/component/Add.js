@@ -54,11 +54,9 @@ function isObject(type){
 }
 
 function renderNumber(a){
-
     return "";
 }
 function renderString(a){
-    console.log(a);
     return "";
 }
 
@@ -139,27 +137,24 @@ class Add extends React.Component {
             data:
                 render(this.props.schema)
             ,
-            message:
-                render(this.props.schema)
+
         };
+        console.log(this.state.data);
     }
     addArrayElement = parents =>{
+
         let schema = this.props.schema.properties;
         let data = this.state.data;
-        let message = this.state.message;
-        let curData = data;
-        let curMessage = message;
+        let cur = data;
         if(parents.length>0){
             parents.forEach(el=>{
-                curData = curData[el]
-                curMessage = curMessage[el]
+                cur = cur[el]
                 schema = schema[el]
             })
         }
         let newElement = render(schema.items)
-        curData.push(newElement);
-        curMessage.push(newElement);
-        this.setState({data:data, message:message})
+        cur.push(newElement);
+        this.setState({data:data})
     }
     deleteArrayElement = parents =>{
         let data = this.state.data;
@@ -213,62 +208,45 @@ class Add extends React.Component {
     handleInputChange = (e,a,parents) => {
         // e has example, data type and the title of the field
         // let example = a.example;
-        let value = e.target.value;
-        let required = e.target.required;
-        let prop = a.title;
         let type = a.type;
-        let minimum = a.minimum;
-        let maximum = a.maximum;
-        let pattern = a.pattern;
-
+        let value = e.target.value;
+        let prop = a.title;
         // TODO: HANDLE VALIDATION HERE
         // ONLY FOR STRING- NUMBER AND integer
         // FOR STRING USE PATTERN IF NEEDED
         // FOR NUMBER USE MAX MIN IF NEEDED
         // DON'T FORGET REQUIRED
-
-        let helperText = " ";
-
-        // integer
+        // Incompleted Validation Feature
         if (type === "integer") {
-            if (!value.match(/^[+-]?\d+$/) && value!=="") {
-                helperText = helperText + "Should be an integer. ";
+            if (!value.slice(-1).match(/^[+-]?\d+$/)) {
+                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
             }
         }
 
-        // number
-        if (type === "number") {
-            if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
-                helperText = helperText + "Should be a number. ";
+        //For double (number)
+        if (e.target.name === "number") {
+            if (!e.target.value.slice(-1).match(/^[+-]?\d+(\.\d+)?$/)) {
+                e.target.value = e.target.value.substring(0, e.target.value.length - 1)
             }
         }
 
-        // min and max
-        if(typeof minimum !== 'undefined' && value!==""){
-            if(value < minimum){
-                helperText = helperText + "Should not be less than " + minimum + ". ";
-            }
-        }
-        if(typeof maximum !== 'undefined' && value!==""){
-            if(value > maximum){
-                helperText = helperText + "Should not be greater than " + maximum + ". ";
-            }
-        }
+        //For email
+        // if (e.target.name == "email"){
+        //     if (e.target.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        //         validation = true;
+        //     } else {
+        //         validation = false;
+        //     }
+        // }
 
         //For required
-        if (required){
-            if (value === ""){
-                helperText = helperText + "Required value. ";
-            }
-        }
-
-        // pattern
-        if(typeof pattern !== 'undefined'){
-            if (!value.match(pattern) && value!=="") {
-                helperText = helperText + "Invalid value. ";
-            }
-        }
-
+        // if (e.target.required){
+        //     if (e.target.value != ""){
+        //         validation = true;
+        //     } else {
+        //         validation = false;
+        //     }
+        // }
         let newData = this.state.data;
         let target = newData
         if(parents.length>0){
@@ -278,16 +256,6 @@ class Add extends React.Component {
         }
         target[prop] = value;
         this.setState({data: newData})
-
-        let newMessage = this.state.message;
-        let t = newMessage;
-        if(parents.length>0){
-            parents.forEach(x => {
-                t = t[x];
-            })
-        }
-        t[prop] = helperText;
-        this.setState({message: newMessage})
     }
 
     generateTextField = (a,idx,s, parents) =>{
@@ -300,18 +268,6 @@ class Add extends React.Component {
             })
         }
         let value = data[prop];
-
-        let message = this.state.message;
-        if(parents.length > 0){
-            parents.forEach(x => {
-                message = message[x];
-            })
-        }
-
-        let helperText = message[prop];
-        if(helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
-            helperText = "Required value. ";
-        }
         return <div style={{paddingLeft: margin}}><TextField
                 key={`tf-${idx}`}
                 id={prop}
@@ -319,7 +275,6 @@ class Add extends React.Component {
                 label={prop}
                 type=""
                 value = {value}
-                helperText = {helperText}
                 margin="normal"
                 style={{
                 width: '50%',
@@ -327,7 +282,17 @@ class Add extends React.Component {
             }} onChange={(e)=>this.handleInputChange(e,a, parents)
         }/></div>
     }
-
+    // generateArray = (a,idx,s) =>{
+    //     return <form>
+    //     <TextField
+    //      name='title'
+    //      label='Array'
+    //      value={a.title}
+    //      margin='normal'
+    //      />
+    //
+    //     </form>
+    // }
      generateObject = (a,idx,s, parents) =>{
         let propArray = [];
         for(let prop in a.properties){
@@ -377,6 +342,11 @@ class Add extends React.Component {
                      }
                  }
 
+                 // for(let prop in a.properties){
+                 //
+                 //     a.properties[prop].title = prop;
+                 //     propArray.push(a.properties[prop])
+                 // }
                  let newParents = parents.slice();
                  newParents.push(a.title);
                  if(propArray.length === 0){

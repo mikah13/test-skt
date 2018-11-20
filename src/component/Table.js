@@ -162,7 +162,6 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     generateTableCell = (a, b,c) => {
-        console.log(a);
         let prop = a.properties[b];
         if(prop.type!=="array" && prop.type!=="object"){
             return <TableCell numeric={false} key={c}>{this.state.data[a.id].properties[b].value}</TableCell>
@@ -205,12 +204,16 @@ class EnhancedTable extends React.Component {
 
     save = a => {
         let newData = this.state.data;
-        newData = newData.map(b => {
-            if (b.id === a.id) {
-                return a;
+        newData.forEach(el=>{
+            if(el.id == a.id){
+                for(let prop in a.properties){
+                    console.log("prop",prop);
+                    console.log("a.prpoerties", a.properties);
+                    el.properties[prop].value = a.properties[prop];
+                }
             }
-            return b;
         })
+
         this.setState({data: newData})
     }
 
@@ -279,7 +282,7 @@ class EnhancedTable extends React.Component {
                                             <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)}/>
                                         </TableCell>
                                         <TableCell padding="checkbox">
-                                        <Edit clickEvent={this.save} schema={objToArray(this.state.items.properties)} data={n}/>
+                                        <Edit clickEvent={this.save} schema={this.state.items} data={n}/>
 
                                         </TableCell>
 
