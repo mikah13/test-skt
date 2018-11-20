@@ -1,0 +1,15 @@
+StrName,StrNum,OBJECTID,Name,Category,Neighbourhood,Zoning,Zone_Category,Owner,Surveyed,Site_Area,Relationship,SHAPE_Length,SHAPE_Area
+RICHMOND ST,331,57,Richard McBride Elementary,School,Victory Heights,P-1,Institutional,New Westminster School District #40,Y,18743.92969,P,561.2374463,18730.46383
+MCBRIDE BLVD,715,58,Justice Institute of BC,School,Glenbrooke South,P-2,Institutional,Justice Institute of BC,Y,49099.91016,P,899.887655,49305.12733
+COURTNEY CRES,91,59,FW Howay Elementary,School,Victory Heights,P-1,Institutional,New Westminster School District #40,Y,16928.05078,P,689.7162324,17468.58689
+SALTER ST,921,60,Queen Elizabeth Elementary,School,Queensborough,P-1,Institutional,New Westminster School District #40,Y,17509.90039,P,686.1722323,18078.12396
+SALTER ST,833,61,Queensborough Middle,School,Queensborough,P-2,Institutional,New Westminster School District #40,Y,15934.54004,P,512.1869325,15874.2673
+LONDON ST,2201,62,Connaught Heights Elementary,School,Connaught Heights,P-1,Institutional,New Westminster School District #40,Y,8911.540039,P,389.8746011,8908.116735
+EIGHTH AVE,1714,63,Lord Tweedsmuir Elementary,School,Westend,P-1,Institutional,New Westminster School District #40,Y,20031.93945,P,622.8963525,20009.708
+EIGHTH ST,120,64,Ecole Fraser River Middle,School,Brow of the Hill,P-2,Institutional,New Westminster School District #40,Y,13407.29981,P,560.8801392,13182.37185
+HAMILTON ST,1010,66,Lord Kelvin Elementary,School,Kelvin,P-1,Institutional,New Westminster School District #40,Y,13078.7002,P,469.9123094,13073.74018
+PARK CRES,701,67,Glenbrook Middle,School,Glenbrooke North,P-1,Institutional,New Westminster School District #40,Y,5759.990234,P,306.3858625,5537.015062
+FADER ST,521,68,Hume Park Elementary (Closed),School,Sapperton,P-1,Institutional,New Westminster School District #40,Y,1889.650024,P,178.5483388,1888.288708
+EIGHTH AVE,735,69,New Westminster Secondary,School,Kelvin,P-2,Institutional,New Westminster School District #40,Y,63079.76953,P,1455.42109,63118.13234
+SECOND ST,605,70,Herbert Spencer Elementary,School,Glenbrooke North,P-1,Institutional,New Westminster School District #40,Y,12165.09961,P,472.957545,12160.33864
+MERIVALE ST,85,278,Qayqayt Elementary,School,Downtown,P-2,INSTITUTIONAL,New Westminster School District #40,Y,12999.08984,P,570.5548837,12965.6603

@@ -1,0 +1,44 @@
+objectID
+
+Name
+
+Category - (public school, alternative education)
+
+x
+y
+Site_Area
+SHAPE_Length
+SHAPE_Area
+MAPID
+
+Address
+	StreetName
+	Street Number
+	Postal Code
+	City
+	Province
+	Country
+	Zone
+	Zone Category
+	Neighborhood - (Victory Heights)
+
+UserInfo
+	createdUser
+	created_date
+	last_edited_user
+	last_edited_date
+	
+
+LifeCycleStatus - (Active, Abandoned)
+	
+
+
+school type - (Elementary, College)
+
+Owner - (New Westminster School District #40)
+
+Surveyed - boolean (y, f)
+
+population
+
+webPageUrl

@@ -1,0 +1,134 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://github.com/OpendataDeveloperNetwork/oden-schemas/blob/master/schemas/Public%20Art.json",
+	"title": "Public Art",
+	"description": "Public Art data for a given city",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"name": {
+				"description": "The name or title for a piece of public art",
+				"type": "string"
+			},
+			"artist": {
+				"description": "The artist name for a piece of public art",
+				"type": "string"
+			},
+			"artProject": {
+				"description": "The project the public art piece was a part of",
+				"type": "string"
+			},
+			"artType": {
+				"description": "The type of art, eg painting, sculpture",
+				"type": "string"
+			},
+			"dimensions": {
+				"description": "Physical dimensions of the public art pieces",
+				"type": "string"
+			},
+			"medium": {
+				"description": "The art medium used for the art piece",
+				"type": "string",
+			},
+			"installDate": {
+				"description": "The date the public art piece was installed",
+				"type": "string",
+				"format": "date-time"
+			},
+			"installYear": {
+				"description": "The year the public art piece was installed",
+				"type": "integer"
+			},
+			"sponsor": {
+				"description": "Sponsor of the public art piece",
+				"type": "string"
+			},
+			"custodian": {
+				"description": "Custodian or caretaker of the public art piece",
+				"type": "string"
+			},
+			"streetAddress": {
+				"description": "the address for a piece of public art",
+				"type": "string"
+			},
+			"description": {
+				"description": "The description for a piece of public art",
+				"type": "string"
+			},
+			"locality": {
+				"description": "The city a piece of public art resides in",
+				"type": "string"
+			},
+			"subdivision": {
+				"description": "The province/state a piece of public art resides in",
+				"type": "string"
+			},
+			"postCode": {
+				"description": "The postal code for a piece of public art",
+				"type" : "string"
+			},
+			"siteName": {
+				"description": "The name of the site where the public art piece is located",
+				"type": "string"
+			},
+			"status": {
+				"description": "Status of the public art piece",
+				"type": "string"
+			},
+			"ownership": {
+				"description": "The owner of the public art piece",
+				"type": "string"
+			},
+			"artistName": {
+				"description": "The name of the artist who created the public art piece",
+				"type": "string"
+			},
+			"artistWebsite": {
+				"description": "The url for the website of the artist that created the public art piece",
+				"type": "string"
+			},
+			"artistBiography": {
+				"description": "The biography of the artist that created the public art piece",
+				"type": "string"
+			},
+			"images": {
+				"description": "Images of the public art installation",
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+				"minItems": 1,
+				"uniqueItems": true
+			},
+			"latitude": {
+				"type": "number",
+				"minimum": -90,
+				"maximum": 90
+			},
+			"longitude": {
+				"type": "number",
+				"minimum": -180,
+				"maximum": 180
+			},
+			"geoLocation": {
+				"type": "object",
+				"required": ["type", "coordinates"],
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [ "Point" ],
+					},
+					"coordinates": {
+						"type": "array",
+						"minItems": 2,
+						"items": {
+							"type": "number"
+						}
+					}
+				}
+			}
+		},
+		"required": ["name", "latitude", "longitude"]
+	}
+}
