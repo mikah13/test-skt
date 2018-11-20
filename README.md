@@ -65,7 +65,7 @@ Hosting React on Firebase is really easy for new comers. All you have to do is f
 * <b>Step 9:</b>: We are now ready to deploy the app! We’ll do that by running ```$ firebase deploy```. After a few seconds you'll see the URL — where your app is hosted — of your app.
 
 Now if you want to update your application and upload everything to your hosted website, run these 2 commands on your console:
-* ```$ npm run build```
+* ```$ npm start build```
 * ```$ firebase deploy```
 <!-- ## Deploy on Azure
 <a href="https://blogs.msdn.microsoft.com/appserviceteam/2016/08/18/announcing-mysql-in-app-preview-for-web-apps/#mysqlconnect"> HERE </a> -->
