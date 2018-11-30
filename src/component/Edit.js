@@ -119,6 +119,40 @@ function getData(data){
     }
     return obj;
 }
+
+function renderStringMessage(){
+    return "";
+}
+
+function renderArrayMessage(obj){
+    let array = [];
+    obj.forEach(el=>{
+        array.push(renderMessage(el))
+    })
+    return array;
+}
+function renderObjectMessage(obj){
+    let newObj = JSON.parse(JSON.stringify(obj));
+    for(let prop in obj){
+        newObj[prop] = renderMessage(obj[prop])
+    }
+    return newObj;
+}
+
+function renderMessage(obj){
+    if(typeof obj !== 'object'){
+        return renderStringMessage();
+    }
+    if(typeof obj === 'object' && Array.isArray(obj) ){
+        return renderArrayMessage(obj);
+    }
+    else{
+        return renderObjectMessage(obj);
+    }
+}
+function getMessage(data){
+    return renderMessage(data);
+}
 /**
  * Class Edit
  * @extends React
@@ -136,14 +170,16 @@ class Edit extends React.Component {
                 }
                 return arr;
             }(this.props.schema.properties),
-            data: getData(this.props.data)
+            data: getData(this.props.data).properties,
+            message: getMessage(getData(this.props.data).properties),
         };
     }
     addArrayElement = parents =>{
 
+
         let schema = this.props.schema.properties;
         let data = this.state.data;
-        let cur = data.properties;
+        let cur = data;
         if(parents.length>0){
             parents.forEach(el=>{
                 cur = cur[el]
@@ -152,11 +188,24 @@ class Edit extends React.Component {
         }
         let newElement = render(schema.items)
         cur.push(newElement);
-        this.setState({data:data})
+
+
+        let message = this.state.message;
+        let curM = message;
+        if(parents.length>0){
+            parents.forEach(el=>{
+                curM = curM[el]
+                //schema = schema[el]
+            })
+        }
+        let newElementM = render(schema.items)
+        curM.push(newElementM);
+        this.setState({data:data, message:message})
+
     }
     deleteArrayElement = parents =>{
         let data = this.state.data;
-        let cur = data.properties;
+        let cur = data;
         if(parents.length>0){
             for(let i = 0 ; i < parents.length - 1; i++){
                 cur = cur[parents[i]]
@@ -164,8 +213,17 @@ class Edit extends React.Component {
         }
         let index = parents[parents.length - 1];
         cur.splice(index, 1);
-        this.setState({data:data})
 
+        let message = this.state.message;
+        let curM = message;
+        if(parents.length>0){
+            for(let i = 0 ; i < parents.length - 1; i++){
+                curM = curM[parents[i]]
+            }
+        }
+        let indexM = parents[parents.length - 1];
+        curM.splice(indexM, 1);
+        this.setState({data:data, message:message})
     }
     /**
      * Click event will open the modal.
@@ -180,7 +238,11 @@ class Edit extends React.Component {
      * @return {[function]} Set open state to false
      */
     handleClose = () => {
-        this.setState({open: false,data: getData(this.props.data)});
+        this.setState({
+            open: false,
+            data: getData(this.props.data).properties,
+            message: getMessage(getData(this.props.data).properties)
+        });
 
     };
 
@@ -191,15 +253,14 @@ class Edit extends React.Component {
      */
     handleSave = _ => {
         let data = this.state.data;
-        this.props.clickEvent(data);
-            this.setState({open: false,data: getData(this.props.data)});
-        // a = JSON.parse(a);
-        //
-        // a.id = this.props.data.id;
-        // this.props.clickEvent(a);
-        // this.setState({
-        //     open: false
-        // });
+        let sendData = {};
+        sendData.id = getData(this.props.data).id;
+        sendData.properties = data;
+        this.props.clickEvent(sendData);
+            this.setState({
+                open: false,
+                data: getData(this.props.data).properties,
+                message: getMessage(getData(this.props.data).properties)});
     }
 
     /**
@@ -208,75 +269,169 @@ class Edit extends React.Component {
      * @return {[function]}  Live update of input data
      */
      handleInputChange = (e,a,parents) => {
+
          // e has example, data type and the title of the field
          // let example = a.example;
          let type = a.type;
+         let required = e.target.required;
          let value = e.target.value;
          let prop = a.title;
+         let minimum = a.minimum;
+         let maximum = a.maximum;
+         let pattern = a.pattern;
+
          // TODO: HANDLE VALIDATION HERE
          // ONLY FOR STRING- NUMBER AND integer
          // FOR STRING USE PATTERN IF NEEDED
          // FOR NUMBER USE MAX MIN IF NEEDED
          // DON'T FORGET REQUIRED
          // Incompleted Validation Feature
+
+         let helperText = " ";
+
+
          if (type === "integer") {
-             if (!value.slice(-1).match(/^[+-]?\d+$/)) {
-                 e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+             if (!value.match(/^[+-]?\d+$/) && value!=="") {
+                 helperText = helperText + "Should be an integer. ";
              }
          }
 
          //For double (number)
-         if (e.target.name === "number") {
-             if (!e.target.value.slice(-1).match(/^[+-]?\d+(\.\d+)?$/)) {
-                 e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+         if (type === "number") {
+             if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
+                 helperText = helperText + "Should be a number. ";
              }
          }
 
-         //For email
-         // if (e.target.name == "email"){
-         //     if (e.target.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-         //         validation = true;
-         //     } else {
-         //         validation = false;
-         //     }
-         // }
+         // min and max
+         if(typeof minimum !== 'undefined' && value!==""){
+             if(value < minimum){
+                 helperText = helperText + "Should not be less than " + minimum + ". ";
+             }
+         }
+         if(typeof maximum !== 'undefined' && value!==""){
+             if(value > maximum){
+                 helperText = helperText + "Should not be greater than " + maximum + ". ";
+             }
+         }
 
          //For required
-         // if (e.target.required){
-         //     if (e.target.value != ""){
-         //         validation = true;
-         //     } else {
-         //         validation = false;
-         //     }
-         // }
+         if (required){
+             if (value === ""){
+                 helperText = helperText + "Required value. ";
+             }
+         }
+
+         // pattern
+         if(typeof pattern !== 'undefined'){
+             if (!value.match(pattern) && value!=="") {
+                 helperText = helperText + "Invalid value. ";
+             }
+         }
+
+
          let newData = this.state.data;
-         let target = newData.properties;
+         let target = newData;
          if(parents.length>0){
              parents.forEach(x => {
                  target = target[x];
              })
          }
          target[prop] = value;
-         this.setState({data: newData})
+
+         let newMessage = this.state.message;
+         let t = newMessage;
+         if(parents.length>0){
+             parents.forEach(x => {
+                 t = t[x];
+             })
+         }
+         t[prop] = helperText;
+         this.setState({data: newData, message: newMessage})
      }
 
      generateTextField = (a,idx,s, parents) =>{
          let margin = (parents.length*100) + "px";
          let prop = a.title;
-         let data = this.state.data.properties;
+         let data = this.state.data;
+         let minimum = a.minimum;
+         let maximum = a.maximum;
+         let pattern = a.pattern;
+         let type = a.type;
+         let required = this.props.schema.required.indexOf(prop) !== -1;
+
+
          if(parents.length > 0){
              parents.forEach(x => {
                  data = data[x];
              })
          }
          let value = data[prop];
+
+         let message = this.state.message;
+         if(parents.length > 0){
+             parents.forEach(x => {
+                 message = message[x];
+             })
+         }
+
+
+         let helperText = message[prop];
+
+
+         if (type === "integer") {
+             if (!value.match(/^[+-]?\d+$/) && value!=="") {
+                 helperText = helperText + "Should be an integer. ";
+             }
+         }
+
+         //For double (number)
+         if (type === "number") {
+             if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
+                 helperText = helperText + "Should be a number. ";
+             }
+         }
+
+         // min and max
+         if(typeof minimum !== 'undefined' && value!==""){
+             if(value < minimum){
+                 helperText = helperText + "Should not be less than " + minimum + ". ";
+             }
+         }
+         if(typeof maximum !== 'undefined' && value!==""){
+             if(value > maximum){
+                 helperText = helperText + "Should not be greater than " + maximum + ". ";
+             }
+         }
+
+         //For required
+         if (required){
+             if (value === ""){
+                 helperText = helperText + "Required value. ";
+             }
+         }
+
+         // pattern
+         if(typeof pattern !== 'undefined'){
+             if (!value.match(pattern) && value!=="") {
+                 helperText = helperText + "Invalid value. ";
+             }
+         }
+
+         if(value.trim() === "" && helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
+             helperText = "Required value. ";
+         }
+
+
          return <div style={{paddingLeft: margin}}><TextField
+                 error = {helperText.trim() === ""?false:true}
                  key={`tf-${idx}`}
                  id={prop}
                  required={this.props.schema.required.indexOf(prop) !== -1?true:false}
                  label={prop}
                  type=""
                  value = {value}
+                helperText = {helperText} //test
                  margin="normal"
                  style={{
                  width: '50%',
@@ -284,17 +439,7 @@ class Edit extends React.Component {
              }} onChange={(e)=>this.handleInputChange(e,a, parents)
          }/></div>
      }
-     // generateArray = (a,idx,s) =>{
-     //     return <form>
-     //     <TextField
-     //      name='title'
-     //      label='Array'
-     //      value={a.title}
-     //      margin='normal'
-     //      />
-     //
-     //     </form>
-     // }
+
       generateObject = (a,idx,s, parents) =>{
          let propArray = [];
          for(let prop in a.properties){
@@ -326,7 +471,7 @@ class Edit extends React.Component {
       generateArray = (a,idx,s,parents)=>{
 
                   let propArray = [];
-                  let data = this.state.data.properties;
+                  let data = this.state.data;
                   if(parents.length>0){
                       parents.forEach(el=>{
                           data = data[el]
@@ -345,11 +490,6 @@ class Edit extends React.Component {
                       }
                   }
 
-                  // for(let prop in a.properties){
-                  //
-                  //     a.properties[prop].title = prop;
-                  //     propArray.push(a.properties[prop])
-                  // }
                   let newParents = parents.slice();
                   newParents.push(a.title);
                   if(propArray.length === 0){
@@ -426,6 +566,7 @@ class Edit extends React.Component {
      * @return {[type]} [description]
      */
     render() {
+
         const {classes} = this.props;
 
         return (<div>

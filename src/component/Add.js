@@ -141,8 +141,6 @@ class Add extends React.Component {
                 render(this.props.schema)
 
         };
-        console.log(this.state.data);
-        console.log(this.state.message);
     }
     addArrayElement = parents =>{
 
@@ -157,8 +155,7 @@ class Add extends React.Component {
         }
         let newElement = render(schema.items)
         cur.push(newElement);
-        this.setState({data:data})
-        
+
         let message = this.state.message;
         let curM = message;
         if(parents.length>0){
@@ -169,7 +166,7 @@ class Add extends React.Component {
         }
         let newElementM = render(schema.items)
         curM.push(newElementM);
-        this.setState({message:message})
+        this.setState({data:data, message:message})
     }
     deleteArrayElement = parents =>{
         let data = this.state.data;
@@ -181,7 +178,7 @@ class Add extends React.Component {
         }
         let index = parents[parents.length - 1];
         cur.splice(index, 1);
-        this.setState({data:data})
+
 
         //test
         let message = this.state.message;
@@ -193,7 +190,7 @@ class Add extends React.Component {
         }
         let indexM = parents[parents.length - 1];
         curM.splice(indexM, 1);
-        this.setState({message:message})
+        this.setState({data:data, message:message})
 
     }
     /**
@@ -211,7 +208,8 @@ class Add extends React.Component {
     handleClose = () => {
         this.setState({
             open: false,
-            data: renderObject(this.props.schema.properties)
+            data: renderObject(this.props.schema.properties),
+            message: renderObject(this.props.schema.properties)
         });
 
     };
@@ -224,11 +222,10 @@ class Add extends React.Component {
     handleAdd = _ => {
         let sendData = this.state.data;
         this.props.clickEvent(sendData);
-        this.setState({open: false, data: renderObject(this.props.schema.properties)});
-
-        //let sendDataM = this.state.message;
-        //this.props.clickEvent(sendDataM);
-        this.setState({open: false, message: renderObject(this.props.schema.properties)});
+        this.setState({
+            open: false,
+            data: renderObject(this.props.schema.properties),
+            message: renderObject(this.props.schema.properties)});
     }
 
     /**
@@ -243,9 +240,10 @@ class Add extends React.Component {
         let required = e.target.required;
         let prop = a.title;
         let type = a.type;
-        let minimum = a.minimum; 
+        let minimum = a.minimum;
         let maximum = a.maximum;
         let pattern = a.pattern;
+
 
         // TODO: HANDLE VALIDATION HERE
         // ONLY FOR STRING- NUMBER AND integer
@@ -254,7 +252,7 @@ class Add extends React.Component {
         // DON'T FORGET REQUIRED
 
         let helperText = " ";
-        
+
         // integer
         if (type === "integer") {
             if (!value.match(/^[+-]?\d+$/) && value!=="") {
@@ -291,7 +289,7 @@ class Add extends React.Component {
         // pattern
         if(typeof pattern !== 'undefined'){
             if (!value.match(pattern) && value!=="") {
-                helperText = helperText + "Invaliad value. ";
+                helperText = helperText + "Invalid value. ";
             }
         }
 
@@ -320,6 +318,7 @@ class Add extends React.Component {
         let margin = (parents.length*100) + "px";
         let prop = a.title;
         let data = this.state.data;
+        let desc = a.description;
         if(parents.length > 0){
             parents.forEach(x => {
                 data = data[x];
@@ -337,8 +336,10 @@ class Add extends React.Component {
         if(helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
             helperText = "Required value. ";
         }
-
-        return <div style={{paddingLeft: margin}}><TextField
+        return <div style={{paddingLeft: margin}}>
+                <TextField
+                
+                error = {helperText.trim() === ""?false:true}
                 key={`tf-${idx}`}
                 id={prop}
                 required={this.props.schema.required.indexOf(prop) !== -1?true:false}
@@ -351,19 +352,9 @@ class Add extends React.Component {
                 width: '50%',
                 marginLeft: '25%'
             }} onChange={(e)=>this.handleInputChange(e,a, parents)
-        }/></div>
+        }/>     </div>
     }
-    // generateArray = (a,idx,s) =>{
-    //     return <form>
-    //     <TextField
-    //      name='title'
-    //      label='Array'
-    //      value={a.title}
-    //      margin='normal'
-    //      />
-    //
-    //     </form>
-    // }
+
      generateObject = (a,idx,s, parents) =>{
         let propArray = [];
         for(let prop in a.properties){
@@ -413,11 +404,6 @@ class Add extends React.Component {
                      }
                  }
 
-                 // for(let prop in a.properties){
-                 //
-                 //     a.properties[prop].title = prop;
-                 //     propArray.push(a.properties[prop])
-                 // }
                  let newParents = parents.slice();
                  newParents.push(a.title);
                  if(propArray.length === 0){

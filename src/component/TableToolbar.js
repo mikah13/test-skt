@@ -81,12 +81,12 @@ class TableToolbar extends React.Component {
                             </Button>
                         </Tooltip>)
                         : (
-                            <Tooltip title="Export">
-                            <IconButton aria-label="Export" onClick={() => {
+                            <Tooltip title="Download">
+                            <Button aria-label="Download" onClick={() => {
                                     this.props.download()
-                                }} variant="fab" color="secondary">
-                                <DownloadIcon/>
-                            </IconButton>
+                                }}  color="default">
+                                Download <DownloadIcon />
+                            </Button>
 
                         </Tooltip>) // SET PROP AS OBJECT BASED ON DATA SCHEMA
                 }

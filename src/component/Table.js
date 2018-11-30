@@ -16,6 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import Loading from './Loading';
 import Edit from './Edit';
 import json_data from '../schemas/Public Art';
+import Message from './Message';
 
 let counter = 0;
 
@@ -185,6 +186,7 @@ class EnhancedTable extends React.Component {
         newData.forEach((el,idx)=>{
             el.id = idx;
         })
+        console.log(this.state.data);
         console.log(newData);
         this.setState({data: newData, selected: []})
 
@@ -195,9 +197,6 @@ class EnhancedTable extends React.Component {
         let copy = JSON.parse(JSON.stringify(this.state.items.properties))
         let len = newData.length;
         newData.push(createData(a, copy, len))
-        //
-
-
         this.setState({data: newData})
 
     }
@@ -205,10 +204,8 @@ class EnhancedTable extends React.Component {
     save = a => {
         let newData = this.state.data;
         newData.forEach(el=>{
-            if(el.id == a.id){
+            if(el.id === a.id){
                 for(let prop in a.properties){
-                    console.log("prop",prop);
-                    console.log("a.prpoerties", a.properties);
                     el.properties[prop].value = a.properties[prop];
                 }
             }
@@ -219,19 +216,27 @@ class EnhancedTable extends React.Component {
 
     upload = a => {
         let data = JSON.parse(a);
+        let copy = JSON.parse(JSON.stringify(this.state.items.properties))
         let newData = this.state.data;
+        let len = newData.length;
         data.forEach(el => {
-            el.id = ++counter;
-            newData.push(el);
+            newData.push(createData(el,copy,len))
+            len++;
         })
         this.setState({data: newData})
     }
 
     download = () => {
-        let downloadData = this.state.data.map(a => {
-            delete a.id;
+        let data= JSON.parse(JSON.stringify(this.state.data));
+        let downloadData = data.map(a => {
+             a = a.properties;
+            for(let prop in a){
+
+                a[prop] = a[prop].value;
+            }
             return a;
         });
+
         function download(filename, text) {
             let element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -241,13 +246,14 @@ class EnhancedTable extends React.Component {
             element.click();
             document.body.removeChild(element);
         }
-        let text = JSON.stringify(downloadData);
+        let text = JSON.stringify(downloadData,null,'\t');
         let filename = "data.json";
         download(filename, text);
 
     }
 
     render() {
+        console.log(this.state.data);
         const {classes} = this.props;
         const {data, selected, rowsPerPage, page} = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -306,6 +312,7 @@ class EnhancedTable extends React.Component {
                         'aria-label' : 'Next Page'
                     }} onChangePage={this.handleChangePage} onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
             </Paper>
+            <Message/>
         </div>);
     }
 }
