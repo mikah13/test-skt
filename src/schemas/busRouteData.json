@@ -1,14 +1,12 @@
 [{
     "OBJECTID":1,
-      "routeNumber": {
-          "ROUTENO_BUSROUTE":130,
-          "route_short_name":156
-      },
+      "routeNumber":156,
     "routeName": {
           "ROUTENAME":"CITY CENTRE TO ABERDEEN",
-          "ALTERNATE": "ABERDEEN",
-          "trip_headsign":"156 BRAID STN"
-    },
+          "ALTERNATE": "ABERDEEN"
+    }
+    ,
+    "trip_headsign":"156 BRAID STN",
       "location": {
           "SHAPE_Length":464.252520826503
       },

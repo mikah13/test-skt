@@ -136,8 +136,10 @@
             "type": "string",
             "example": "Victory Heights"
           }
-        }
+        },
+          "required":["StreetNumber","StreetName","PostalCode"]
       }
+      
     },
     "required": [
       "SchoolName",
