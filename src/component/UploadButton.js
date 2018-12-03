@@ -29,7 +29,7 @@ class UploadButton extends Component {
      * @return {[output]}  Check if file type is supported
      */
     changeEvent = evt => {
-        console.log(1);
+
         let file = evt.target.files[0];
         let file_type = file.name.split('.')[1];
         if (FILE_TYPE.indexOf(file_type) !== -1) {
@@ -51,19 +51,18 @@ class UploadButton extends Component {
         const {classes} = this.props;
         return (<div>
             <input className={classes.input} id="contained-button-file" multiple="multiple" type="file" onChange={this.changeEvent}/>
-            <span>
-
-                        <Tooltip title="Import">
-                    <Button variant="contained" color="default" component="span" className={classes.button} >
-                        <span style={btnStyle}>IMPORT</span>
-                        <CloudUploadIcon className={classes.rightIcon}/>
+                <span>
+                    <label htmlFor="contained-button-file">
+                        <Button variant="contained" color="secondary" component="span" className={classes.button}>
+                            <span style={btnStyle}>Upload</span>
+                            <CloudUploadIcon className={classes.rightIcon}/>
+                        </Button>
+                    </label>
+                    <Button id="input-file-button">
+                        <span id="input-file-name"></span>
                     </Button>
-                </Tooltip>
+                </span>
 
-                <Button id="input-file-button">
-                    <span id="input-file-name"></span>
-                </Button>
-            </span>
 
         </div>);
     }

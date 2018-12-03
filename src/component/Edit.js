@@ -10,7 +10,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-// import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -59,19 +58,15 @@ function renderArray(arr){
     let result = [];
     let type =arr.items.type ;
     if(isNumber(type)){
-        result.push(renderNumber())
+
     }
     if(isString(type)){
-        result.push(renderString())
     }
     if(isObject(type)){
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
+
     }
     if(isArray(type)){
-        result.push(renderObject(arr.items));
+
     }
     return result;
 }
@@ -171,7 +166,7 @@ class Edit extends React.Component {
                 return arr;
             }(this.props.schema.properties),
             data: getData(this.props.data).properties,
-            message: getMessage(getData(this.props.data).properties),
+            message: this.props.data.error,
         };
     }
     addArrayElement = parents =>{
@@ -252,11 +247,14 @@ class Edit extends React.Component {
      * @return {[type]}   [description]
      */
     handleSave = _ => {
-        let data = this.state.data;
+        let data = JSON.parse(JSON.stringify(this.state.data));
         let sendData = {};
         sendData.id = getData(this.props.data).id;
+
         sendData.properties = data;
-        this.props.clickEvent(sendData);
+        let sendMessage = JSON.parse(JSON.stringify(this.state.message))
+                console.log('this id ',sendData);
+        this.props.clickEvent(sendData,sendMessage);
             this.setState({
                 open: false,
                 data: getData(this.props.data).properties,
@@ -287,7 +285,7 @@ class Edit extends React.Component {
          // DON'T FORGET REQUIRED
          // Incompleted Validation Feature
 
-         let helperText = " ";
+         let helperText = "";
 
 
          if (type === "integer") {
@@ -359,7 +357,7 @@ class Edit extends React.Component {
          let pattern = a.pattern;
          let type = a.type;
          let required = this.props.schema.required.indexOf(prop) !== -1;
-
+         let desc = a.example?'E.g: ' + a.example:'';
 
          if(parents.length > 0){
              parents.forEach(x => {
@@ -369,69 +367,69 @@ class Edit extends React.Component {
          let value = data[prop];
 
          let message = this.state.message;
+
          if(parents.length > 0){
              parents.forEach(x => {
+
                  message = message[x];
              })
          }
 
-
          let helperText = message[prop];
-
-
-         if (type === "integer") {
+         if (type === "integer" && helperText.trim() === '') {
              if (!value.match(/^[+-]?\d+$/) && value!=="") {
                  helperText = helperText + "Should be an integer. ";
              }
          }
 
          //For double (number)
-         if (type === "number") {
+         if (type === "number"  && helperText.trim() === '') {
              if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
                  helperText = helperText + "Should be a number. ";
              }
          }
 
          // min and max
-         if(typeof minimum !== 'undefined' && value!==""){
+         if(typeof minimum !== 'undefined' && value!==""  && helperText.trim() === ''){
              if(value < minimum){
                  helperText = helperText + "Should not be less than " + minimum + ". ";
              }
          }
-         if(typeof maximum !== 'undefined' && value!==""){
+         if(typeof maximum !== 'undefined' && value!==""  && helperText.trim() === ''){
              if(value > maximum){
                  helperText = helperText + "Should not be greater than " + maximum + ". ";
              }
          }
 
          //For required
-         if (required){
+         if (required  && helperText.trim() === ''){
              if (value === ""){
                  helperText = helperText + "Required value. ";
              }
          }
 
          // pattern
-         if(typeof pattern !== 'undefined'){
+         if(typeof pattern !== 'undefined'  && helperText.trim() === ''){
              if (!value.match(pattern) && value!=="") {
                  helperText = helperText + "Invalid value. ";
              }
          }
 
-         if(value.trim() === "" && helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
+         if(value.trim() === "" && helperText === "" && this.props.schema.required.indexOf(prop) !== -1  && helperText.trim() === ''){
              helperText = "Required value. ";
          }
 
 
          return <div style={{paddingLeft: margin}}><TextField
                  error = {helperText.trim() === ""?false:true}
+                 placeholder = {desc}
                  key={`tf-${idx}`}
                  id={prop}
                  required={this.props.schema.required.indexOf(prop) !== -1?true:false}
                  label={prop}
                  type=""
                  value = {value}
-                helperText = {helperText} //test
+                 helperText = {helperText} //test
                  margin="normal"
                  style={{
                  width: '50%',

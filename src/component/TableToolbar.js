@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import DownloadIcon from '@material-ui/icons/Archive';
+import UndoIcon from '@material-ui/icons/Undo';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 /**
@@ -64,35 +64,36 @@ class TableToolbar extends React.Component {
 
 
             <div className={classes.spacer}/>
-        {    // <Tooltip title="Export these datasets to your computer as a JSON file. If there are no data, empty JSON will be downloaded.">
-            //                                 <IconButton bsSize="xsmall" bsStyle="link">
-            //                                     ?
-            //                                 </IconButton>
-            //                             </Tooltip>
-        }
+
             <div className={classes.actions}>
                 {
                     numSelected > 0
-                        ? (<Tooltip title="Delete">
+                        ? (
                             <Button onClick={() => {
                                     this.props.delete()
                                 }}>
                                 <DeleteIcon/>
                             </Button>
-                        </Tooltip>)
+                        )
                         : (
-                            <Tooltip title="Download">
+                            <div style={{textAlign:"right"}}>
+
                             <Button aria-label="Download" onClick={() => {
                                     this.props.download()
                                 }}  color="default">
                                 Download <DownloadIcon />
                             </Button>
+                            </div>
 
-                        </Tooltip>) // SET PROP AS OBJECT BASED ON DATA SCHEMA
+                    )
                 }
             </div>
         </Toolbar>);
-    }
+    }// <Button aria-label="Download" onClick={() => {
+    //         this.props.undo()
+    //     }}  color="default">
+    //     Undo <UndoIcon />
+    // </Button>
 }
 TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,

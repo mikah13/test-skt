@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
+
 import AddElementButton from './AddElementButton'
 import DeleteElementButton from './DeleteElementButton'
 /**
@@ -64,19 +64,16 @@ function renderArray(arr){
     let result = [];
     let type =arr.items.type ;
     if(isNumber(type)){
-        result.push(renderNumber())
+        // result.push(renderNumber())
     }
     if(isString(type)){
-        result.push(renderString())
+        // result.push(renderString())
     }
     if(isObject(type)){
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
-        // result.push(renderObject(arr.items.properties));
+
     }
     if(isArray(type)){
-        result.push(renderObject(arr.items));
+        // result.push(renderObject(arr.items));
     }
     return result;
 }
@@ -117,6 +114,16 @@ function render(object){
         return renderArray(object)
     }
 }
+
+function renderMessage(object, required){
+    let obj = render(JSON.parse(JSON.stringify(object)))
+    for(let prop in obj){
+        if(required.indexOf(prop)!==-1){
+            obj[prop] = 'Required value. ';
+        }
+    }
+    return obj;
+}
 /**
  * Class Add
  * @extends React
@@ -138,7 +145,7 @@ class Add extends React.Component {
                 render(this.props.schema)
             ,
             message:
-                render(this.props.schema)
+                renderMessage(this.props.schema, this.props.schema.required)
 
         };
     }
@@ -209,7 +216,7 @@ class Add extends React.Component {
         this.setState({
             open: false,
             data: renderObject(this.props.schema.properties),
-            message: renderObject(this.props.schema.properties)
+            message: renderMessage(this.props.schema, this.props.schema.required)
         });
 
     };
@@ -221,11 +228,13 @@ class Add extends React.Component {
      */
     handleAdd = _ => {
         let sendData = this.state.data;
-        this.props.clickEvent(sendData);
+        let sendMessage = this.state.message;
+        this.props.clickEvent(sendData, sendMessage);
         this.setState({
             open: false,
             data: renderObject(this.props.schema.properties),
-            message: renderObject(this.props.schema.properties)});
+            message: renderMessage(this.props.schema, this.props.schema.required)
+        });
     }
 
     /**
@@ -243,6 +252,7 @@ class Add extends React.Component {
         let minimum = a.minimum;
         let maximum = a.maximum;
         let pattern = a.pattern;
+
 
 
         // TODO: HANDLE VALIDATION HERE
@@ -318,7 +328,7 @@ class Add extends React.Component {
         let margin = (parents.length*100) + "px";
         let prop = a.title;
         let data = this.state.data;
-        let desc = a.description;
+        let desc = a.example?'E.g: ' + a.example:'';
         if(parents.length > 0){
             parents.forEach(x => {
                 data = data[x];
@@ -338,7 +348,7 @@ class Add extends React.Component {
         }
         return <div style={{paddingLeft: margin}}>
                 <TextField
-                
+                placeholder = {desc}
                 error = {helperText.trim() === ""?false:true}
                 key={`tf-${idx}`}
                 id={prop}
@@ -481,12 +491,12 @@ class Add extends React.Component {
     render() {
         const {classes} = this.props;
         return (<div style={margin}>
-            <Tooltip title="Add New">
+
                 <Button variant="contained" color="primary" aria-label="Add" className={classes.button} onClick={this.handleClickOpen}>
                     <AddIcon/>
                     Add
                 </Button>
-            </Tooltip>
+
             <Dialog fullScreen={true} open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>

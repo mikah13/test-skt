@@ -17,8 +17,86 @@ import Loading from './Loading';
 import Edit from './Edit';
 import json_data from '../schemas/Public Art';
 import Message from './Message';
+import IconButton from '@material-ui/core/IconButton';
+import Warning from '@material-ui/icons/Error';
 
-let counter = 0;
+function isNumber(type){
+    return type === "number" || type==="integer"
+}
+function isString(type){
+    return type==="string";
+}
+function isArray(type){
+    return type==="array";
+}
+function isObject(type){
+    return type === "object";
+}
+
+function renderNumber(a){
+    return "";
+}
+function renderString(a){
+    return "";
+}
+
+function renderArray(arr,curData){
+    let result = [];
+    let type =arr.items.type ;
+    if(isNumber(type)){
+        curData.forEach(e=>{e = renderNumber()})
+    }
+    if(isString(type)){
+        curData.forEach(e=>{e = renderString()})
+    }
+    if(isObject(type)){
+        curData.forEach(e=>{e = renderObject(arr.items.properties)})
+
+    }
+    if(isArray(type)){
+            curData.forEach(e=>{e = renderObject(arr.items)})
+
+    }
+    return curData
+
+}
+
+
+function renderObject(obj){
+    let object = {}
+    for(let prop in obj){
+        let type = obj[prop].type;
+        if(isNumber(type)){
+            object[prop] = renderNumber(obj[prop]);
+        }
+        if(isString(type)){
+            object[prop] = renderString(obj[prop]);
+        }
+        if(isObject(type)){
+            object[prop]= renderObject(obj[prop].properties)
+        }
+        if(isArray(type)){
+            object[prop] = renderArray(obj[prop])
+        }
+    }
+    return object;
+}
+
+function render(object){
+
+    if(isNumber(object.type)){
+        return renderNumber(object)
+    }
+    if(isString(object.type)){
+        return renderString(object)
+    }
+    if(isObject(object.type)){
+        return renderObject(object.properties)
+    }
+    if(isArray(object.type)){
+        return renderArray(object)
+    }
+}
 
 
 /**
@@ -27,15 +105,17 @@ let counter = 0;
  * @param  {[type]} schema [description]
  * @return {[type]}        [description]
  */
-function createData(data, schema, len) {
-    let object = schema;
+function createData(data, schema, len, err) {
+    let object = JSON.parse(JSON.stringify(schema));
     for(let prop in object){
         object[prop].value = data[prop];
     }
     let newData = {
         id: len,
-        properties:object
+        properties:object,
+        error: err,
     }
+
     return newData;
 }
 
@@ -96,7 +176,8 @@ class EnhancedTable extends React.Component {
             page: 0,
             rowsPerPage: 5,
             items: {},
-            isLoaded: false
+            isLoaded: false,
+            previousData:[[]]
         };
         this.timer = null;
 
@@ -164,14 +245,17 @@ class EnhancedTable extends React.Component {
 
     generateTableCell = (a, b,c) => {
         let prop = a.properties[b];
+        let error = this.state.data[a.id].error[b];
         if(prop.type!=="array" && prop.type!=="object"){
-            return <TableCell numeric={false} key={c}>{this.state.data[a.id].properties[b].value}</TableCell>
+
+            return <TableCell numeric={false} key={c} style={{color:error.trim()!== '' ? 'red':''}}>{this.state.data[a.id].properties[b].value} { error.trim()!== '' ? <Warning/>:''}</TableCell>
         }
-        return <TableCell numeric={false} key={c}>
-        {
-            //<Edit clickEvent={this.save} schema={this.state.items} data={a} />
+        if(prop.type==="array"){
+            return <TableCell numeric={false} key={c}>{ "Array of "  + this.state.data[a.id].properties[b].value.length  + " element(s)"}</TableCell>
         }
-        </TableCell>
+        return <TableCell numeric={false} key={c}>{ "Object Type: " + this.state.data[a.id].properties[b].title}</TableCell>
+
+
     };
 
     generateTableData = obj => {
@@ -179,52 +263,147 @@ class EnhancedTable extends React.Component {
             return this.generateTableCell(obj, e, i);
         })
     }
+    archive = _=>{
+
+        let oldData = JSON.parse(JSON.stringify(this.state.data));
+        let prevData = JSON.parse(JSON.stringify(this.state.previousData));
+        prevData.push(oldData);
+        this.setState({
+            previousData:prevData
+        })
+
+    }
+    undo = _=>{
+        let oldData;
+        if(this.state.previousData.length > 0){
+            this.state.previousData.pop();
+            if(this.state.previousData.length === 0){
+                oldData = [[]];
+                this.setState({data:oldData})
+            }
+            else{
+                oldData = this.state.previousData[this.state.previousData.length-1];
+                    this.setState({data:oldData})
+            }
+
+        }
+
+    }
+
     delete =  _=> {
+        this.archive();
         let newData = this.state.data.filter((a, b) => {
             return this.state.selected.indexOf(a.id) === -1;
         })
         newData.forEach((el,idx)=>{
             el.id = idx;
         })
-        console.log(this.state.data);
-        console.log(newData);
+
         this.setState({data: newData, selected: []})
 
     }
-    add = a => {
+    add = (a,b) => {
 
+
+        let error = b;
         let newData = this.state.data;
+
         let copy = JSON.parse(JSON.stringify(this.state.items.properties))
         let len = newData.length;
-        newData.push(createData(a, copy, len))
+        newData.push(createData(a, copy, len, error))
+        this.archive();
         this.setState({data: newData})
 
     }
 
-    save = a => {
+    save = (a,b) => {
+        this.archive();
         let newData = this.state.data;
+        let error = b;
         newData.forEach(el=>{
             if(el.id === a.id){
+                console.log(a.id);
                 for(let prop in a.properties){
                     el.properties[prop].value = a.properties[prop];
                 }
+                el.error = error;
             }
         })
-
         this.setState({data: newData})
     }
 
     upload = a => {
-        let data = JSON.parse(a);
-        let copy = JSON.parse(JSON.stringify(this.state.items.properties))
-        let newData = this.state.data;
-        let len = newData.length;
-        data.forEach(el => {
-            newData.push(createData(el,copy,len))
-            len++;
-        })
-        this.setState({data: newData})
+        this.archive();
+        let file = JSON.parse(a);
+        let schemaName = this.props.match.params.schema;
+        // if(schema === file.schema){
+            let data = file.data;
+            let schema = this.state.items;
+            let copy = JSON.parse(JSON.stringify(this.state.items.properties))
+            let newData = this.state.data;
+            for(let i = 0 ; i < data.length; i++){
+
+                let len = newData.length;
+                let error = this.validate(JSON.parse(JSON.stringify(data[i])), schema);
+                console.log('upload data', data[i]);
+                newData.push(createData(data[i], copy, len, error))
+            }
+
+            this.setState({data: newData})
+
+
     }
+    validate = (data, schema)=>{
+        let newData = data;
+        for(let prop in data){
+            let type = schema.properties[prop].type;
+            if(type==='number' || type==='integer' || type==='string'){
+                let value = data[prop];
+                let required = schema.required.indexOf(prop) !== -1;
+                let type = schema.properties[prop].type;
+                let minimum = schema.properties[prop].minimum;
+                let maximum = schema.properties[prop].maximum;
+                let pattern = schema.properties[prop].pattern;
+                let helperText = "";
+                if (type === "integer") {
+                    if (!value.match(/^[+-]?\d+$/) && value!=="") {
+                        helperText = helperText + "Should be an integer. ";
+                    }
+                }
+                if (type === "number") {
+                    if (!value.match(/^[+-]?\d+(\.\d+)?$/) && value!=="") {
+                        helperText = helperText + "Should be a number. ";
+                    }
+                }
+                if(typeof minimum !== 'undefined' && value!==""){
+                    if(value < minimum){
+                        helperText = helperText + "Should not be less than " + minimum + ". ";
+                    }
+                }
+                if(typeof maximum !== 'undefined' && value!==""){
+                    if(value > maximum){
+                        helperText = helperText + "Should not be greater than " + maximum + ". ";
+                    }
+                }
+                if (required){
+                    if (value === ""){
+                        helperText = helperText + "Required value. ";
+                    }
+                }
+
+                newData[prop] = helperText;
+            }
+            else if(type ==='array'){
+                newData[prop] = renderArray(schema.properties[prop],data[prop])
+            }
+            else if(type==='object'){
+                newData[prop] = renderObject(schema.properties[prop].properties)
+            }
+        }
+        return newData;
+    }
+
+
 
     download = () => {
         let data= JSON.parse(JSON.stringify(this.state.data));
@@ -236,7 +415,10 @@ class EnhancedTable extends React.Component {
             }
             return a;
         });
-
+        downloadData = {
+            schema:this.props.match.params.schema,
+            data:downloadData
+        }
         function download(filename, text) {
             let element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -274,7 +456,7 @@ class EnhancedTable extends React.Component {
             <Paper className={classes.root}>
                 <TableToolbar numSelected={selected.length} schema={this.props.match.params.schema} delete={() => {
                         this.delete()
-                    }} download={this.download}/>
+                    }} download={this.download} undo={this.undo}/>
 
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
@@ -312,7 +494,7 @@ class EnhancedTable extends React.Component {
                         'aria-label' : 'Next Page'
                     }} onChangePage={this.handleChangePage} onChangeRowsPerPage={this.handleChangeRowsPerPage}/>
             </Paper>
-            <Message/>
+
         </div>);
     }
 }
