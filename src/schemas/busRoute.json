@@ -9,15 +9,10 @@
       "OBJECTID": {
         "type": "integer"
       },
-      "routeNumber": {
-        "type": "object",
-        "properties": {
-          "ROUTENO_BUSROUTE": {
-            "description": "Route number",
-            "type": "integer",
-            "example": 156
-          }
-        }
+      "ROUTENO_BUSROUTE": {
+        "type": "integer",
+        "description": "Route number",
+        "example": 156
       },
       "routeName": {
         "type": "object",
