@@ -77,7 +77,11 @@ class TableToolbar extends React.Component {
                         )
                         : (
                             <div style={{textAlign:"right"}}>
-
+                            <Button aria-label="Download" onClick={() => {
+                                    this.props.undo()
+                                }}  color="default">
+                                Undo <UndoIcon />
+                            </Button>
                             <Button aria-label="Download" onClick={() => {
                                     this.props.download()
                                 }}  color="default">
@@ -89,11 +93,7 @@ class TableToolbar extends React.Component {
                 }
             </div>
         </Toolbar>);
-    }// <Button aria-label="Download" onClick={() => {
-    //         this.props.undo()
-    //     }}  color="default">
-    //     Undo <UndoIcon />
-    // </Button>
+    }
 }
 TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,

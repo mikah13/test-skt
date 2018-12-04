@@ -118,7 +118,7 @@ function render(object){
 function renderMessage(object, required){
     let obj = render(JSON.parse(JSON.stringify(object)))
     for(let prop in obj){
-        if(required.indexOf(prop)!==-1){
+        if(required.indexOf(prop)!==-1 && (isNumber(object[prop]) || isString(object[prop]))){
             obj[prop] = 'Required value. ';
         }
     }
@@ -342,7 +342,9 @@ class Add extends React.Component {
                 message = message[x];
             })
         }
+        console.log('state message',message);
         let helperText = message[prop];
+        console.log('message',parents);
         if(helperText === "" && this.props.schema.required.indexOf(prop) !== -1){
             helperText = "Required value. ";
         }

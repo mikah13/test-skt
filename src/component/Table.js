@@ -190,6 +190,7 @@ class EnhancedTable extends React.Component {
     componentDidMount() {
         let url = 'https://raw.githubusercontent.com/OpendataDeveloperNetwork/oden-schemas/master/schemas/' + encode(this.props.match.params.schema);
         fetch(url).then(res => res.json()).then((result) => {
+            console.log(json_data);
             this.timer = setTimeout(() => this.setState({isLoaded: true, items: json_data.items}), 900);
         }, (error) => {
             this.setState({isLoaded: true, error});
