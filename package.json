@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",
     "babel-polyfill": "^6.26.0",
+    "firebase": "^5.8.4",
     "moment": "^2.22.2",
     "mui-datatables": "^2.0.0-beta-36",
     "muicss": "^0.9.41",
