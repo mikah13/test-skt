@@ -9,7 +9,6 @@ import {lighten} from '@material-ui/core/styles/colorManipulator';
 import DownloadIcon from '@material-ui/icons/Archive';
 import UndoIcon from '@material-ui/icons/Undo';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 /**
  * Style Setting for TableToolbar
  * @param  {[type]} theme [description]

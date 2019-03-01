@@ -11,23 +11,23 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import StarIcon from '@material-ui/icons/Star';
 import Button from '@material-ui/core/Button';
 function TabContainer(props) {
-    return (<Typography component="div" style={{
-            padding: 8 * 3
-        }}>
-        {props.children}
-    </Typography>);
+  return (<Typography component="div" style={{
+      padding: 8 * 3
+    }}>
+    {props.children}
+  </Typography>);
 }
 
 TabContainer.propTypes = {
-    children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 };
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        width: '90%',
-        backgroundColor: theme.palette.background.paper
-    }
+  root: {
+    flexGrow: 1,
+    width: '90%',
+    backgroundColor: theme.palette.background.paper
+  }
 });
 
 /**
@@ -35,56 +35,56 @@ const styles = theme => ({
  * @extends React
  */
 class ScrollableTabs extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: 0
-        };
-
-    }
-    handleChange = (event, value) => {
-        this.setState({value});
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 0
     };
 
-    generateTabs = _ => {
-        return Array(26).fill('').map((a, b) => {
-            return <Tab key={`tab-${b}`} label={String.fromCharCode(b + 65).toUpperCase()}/>;
-        })
+  }
+  handleChange = (event, value) => {
+    this.setState({value});
+  };
 
-    }
-    generateItems = value => {
-        return this.props.data.map((item, i) => {
-            return value === (item.name[0].charCodeAt(0) - 65) && <TabContainer key={`tabContainer-${i}`}>
-                <Button href={`/editor/${item.name.split('.json')[0].split(' ').join('_').toLowerCase()}`} target="_blank">
-                    <ListItem button={false}>
-                        <ListItemIcon>
-                            <StarIcon/>
-                        </ListItemIcon>
-                        <ListItemText inset={true} primary={item.name.split('.json')[0]}/>
-                    </ListItem>
-                </Button>
+  generateTabs = _ => {
+    return Array(26).fill('').map((a, b) => {
+      return <Tab key={`tab-${b}`} label={String.fromCharCode(b + 65).toUpperCase()}/>;
+    })
 
-            </TabContainer>
-        })
+  }
+  generateItems = value => {
+    return this.props.data.map((item, i) => {
+      return value === (item.name[0].charCodeAt(0) - 65) && <TabContainer key={`tabContainer-${i}`}>
+        <Button href={`/editor/${item.name.split('.json')[0].split(' ').join('_').toLowerCase()}`} target="_blank">
+          <ListItem button={false}>
+            <ListItemIcon>
+              <StarIcon/>
+            </ListItemIcon>
+            <ListItemText inset={true} primary={item.name.split('.json')[0]}/>
+          </ListItem>
+        </Button>
 
-    }
-    render() {
-        const {classes} = this.props;
-        const {value} = this.state;
+      </TabContainer>
+    })
 
-        return (<div className={classes.root}>
-            <AppBar position="static">
-                <Tabs value={value} onChange={this.handleChange} scrollable={true} scrollButtons="off">
-                    {this.generateTabs()}
-                </Tabs>
-            </AppBar>
-            {this.generateItems(value)}
-        </div>);
-    }
+  }
+  render() {
+    const {classes} = this.props;
+    const {value} = this.state;
+
+    return (<div className={classes.root}>
+      <AppBar position="static">
+        <Tabs value={value} onChange={this.handleChange} scrollable={true} scrollButtons="off">
+          {this.generateTabs()}
+        </Tabs>
+      </AppBar>
+      {this.generateItems(value)}
+    </div>);
+  }
 }
 
 ScrollableTabs.propTypes = {
-    classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ScrollableTabs);

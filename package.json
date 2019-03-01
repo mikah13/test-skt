@@ -25,5 +25,17 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build"
-  }
+  },
+  "description": "<p align=\"center\" ><a href=\"https://skytech-8ce24.firebaseapp.com/\" target=\"_blank\"><img style=\"display: block; margin: auto;\" src=\"https://avatars1.githubusercontent.com/u/37063945?s=200&v=4\" /></a></p> <h1 align=\"center\">OPEN DATA EDITOR</h1> <h4 align=\"center\">Opendata Developer Network</h4>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikah13/test-skt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikah13/test-skt/issues"
+  },
+  "homepage": "https://github.com/mikah13/test-skt#readme"
 }
