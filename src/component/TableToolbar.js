@@ -16,7 +16,8 @@ import Button from '@material-ui/core/Button';
  */
 const toolbarStyles = theme => ({
     root: {
-        paddingRight: theme.spacing.unit
+        paddingRight: theme.spacing.unit,
+        paddingTop: '10px'
     },
     highlight: theme.palette.type === 'light'
         ? {
